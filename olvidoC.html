@@ -1,0 +1,90 @@
+<!-- INICIO HEADER -->
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		      <a class="navbar-brand" href="#/">Rapsodia</a>
+		    </div>
+
+		  </div><!-- /.container-fluid -->
+		</nav>
+    <!-- FIN HEADER -->
+
+    <!-- INICIO CUERPO -->
+
+		<section id="login" style="margin-top: 65px;">
+	    		<div class="container ">
+	        		<br>
+	                <h3 class="feature_title col-md-offset-5">Recuperar Contraseña</h3>
+	                <hr>
+	                <div ng-show = "sh" class="row">            
+	                    <div class="col-md-4 col-md-offset-4 left">
+	                        <form role="form" name="oc">
+								<div class="form-group">
+									<label for="email"><strong><font color="blue">Ingrese su e-mail</font></strong></label>
+									<input type="email" class="form-control" name = "email" placeholder="E-mail" ng-required = "true" ng-model="email">
+								</div>
+
+								<!-- Inicio validación del email -->
+								<div role="alert">
+							      <span class="error" ng-if="oc.email.$error.required && oc.email.$touched">
+							        Email Requerido</span>
+
+							        <span class="error" ng-if="oc.email.$error.email">
+							        Email inválido</span>
+							    </div>
+								<!-- Fin validación del email -->
+	                             <div ng-show = "sh" class="form-level">
+	                             	<button class="btn btn-primary col-md-offset-2 left" ng-disabled = "oc.email.$invalid" ng-click="next()">Siguiente</button>
+									<button class="btn btn-primary col-md-offset-1 left" ng-click="back()">Cancelar</button>                          
+	                             </div>
+	                             <br>
+	                        </form>
+							<br>
+								<div ng-show = "log" class="alert alert-info ">
+								    <strong class = "col-md-offset-2 left">{{mensaje}}</strong>
+								</div>				
+	                        <br>
+	                	</div>
+	                </div>
+	                <div ng-hide = "sh" class = "row">
+	                	<div class="col-md-4 col-md-offset-4 left">
+	                        <form role="form" name="ocf">
+	                        	<div class="form-group">
+									<label for="email"><strong><font color="blue">E-mail</font></strong></label>
+									<output class = "form-control" name="y" for="a c">{{usuario.emailU}}</output>
+								</div>
+								<div class="form-group">
+									<label for="pregS"><strong><font color="blue">Pregunta secreta</font></strong></label>
+									<output class = "form-control" name="x" for="a b">{{usuario.preguntaU}}</output>
+								</div>
+								<div class="form-group">
+									<label for="res"><strong><font color="blue">Respuesta</font></strong></label>
+									<input type="password" class="form-control" name = "pass" id="pass" ng-required = "true" ng-model="respuesta">
+								</div>
+
+								<!-- Inicio validación respuesta -->
+								<div role="alert">
+							      <span class="error" ng-if="ocf.pass.$error.required && ocf.pass.$touched">
+							        Respuesta Requerido</span>
+							    </div>
+								<!-- Fin validación del respuestaa-->
+
+	                             <div class="form-level">
+	                             	<button class="btn btn-primary col-md-offset-2 left" ng-disabled = "ocf.pass.$invalid" ng-click="send()">Enviar</button>
+									<button class="btn btn-primary col-md-offset-1 left" ng-click="back()">Cancelar</button>                          
+	                             </div>
+	                             <br>
+	                        </form>
+	                        <br>
+								<div ng-show = "log" class="alert alert-info ">
+								    <strong class = "col-md-offset-2 left">{{mensaje}}</strong>
+								</div>				
+	                            <br>
+	                	</div>
+	                </div>
+	                            
+	            </div>
+		</section>
+
+    <!-- FIN CUERPO -->

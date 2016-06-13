@@ -1,0 +1,63 @@
+<!-- INICIO HEADER -->
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		      <a class="navbar-brand" href="#/">Rapsodia</a>
+		    </div>
+
+		  </div><!-- /.container-fluid -->
+		</nav>
+    <!-- FIN HEADER -->
+
+    <!-- INICIO CUERPO -->
+
+		<section id="login" style="margin-top: 65px;">
+	    		<div class="container ">
+	        		<br>
+	                <h3 class="feature_title col-md-offset-5">Inicio de sesión</h3>
+	                <hr>
+	                <div class="row">
+	                    <div class="col-md-4 col-md-offset-4 left">
+	                        <form role="form" name="inicioSesion">
+								<div class="form-group">
+									<label for="email"><strong><font color="blue">E-mail</font></strong></label>
+									<input type="email" name = "email" class="form-control" id = "email" placeholder="E-mail" ng-required = "true" ng-model="username">
+								</div>
+								<!-- Inicio validación del email -->
+								<div role="alert">
+							      <span class="error" ng-if="inicioSesion.email.$error.required && inicioSesion.email.$touched">
+							        Email Requerido</span>
+
+							        <span class="error" ng-if="inicioSesion.email.$error.email">
+							        Email inválido</span>
+							    </div>
+								<!-- Fin validación del email -->
+								<div class="form-group">
+									<label for="pass"><strong><font color="blue">Contraseña</font></strong></label>
+									<input type="password" name = "pass" class="form-control" id="pass" placeholder="Contraseña" ng-required = "true" ng-model="password" maxlength = "20">
+								</div>
+								
+								<!-- Inicio validación de la password -->
+								<div role="alert">
+							      <span class="error" ng-if="inicioSesion.pass.$error.required && inicioSesion.pass.$touched">
+							        Contraseña Requerida</span>
+							    </div>
+								<!-- Fin validación de la password -->
+
+	                            <div class="form-level">
+	                             	<button class="btn btn-primary col-md-offset-2 left" ng-disabled = "inicioSesion.email.$invalid || inicioSesion.pass.$invalid" ng-click="login()">Ingresar</button>
+									<button class="btn btn-primary col-md-offset-1 left" ng-click="forgetPass()">Olvidó Contraseña?</button>
+								</div>
+								<br>
+								<div ng-show = "log" class="alert alert-info ">
+								    <strong class = "col-md-offset-2 left">{{mensaje}}</strong>
+								</div>				
+	                            <br>
+	                        </form>
+	                	</div>
+	                </div>
+	            </div>
+		</section>
+
+    <!-- FIN CUERPO -->
