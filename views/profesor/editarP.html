@@ -1,0 +1,126 @@
+<md-content class="md-whiteframe-z3" flex >
+                <div layout = "column">
+                <!-- Editar de la columna-->
+                <div>
+                    <form name="edita">
+                    <div  flex-offset = "15" layout = "row" layout-align="center center">
+                      <!-- Primer elemento de la row-->
+                      <div layout = "column" >
+                      <br>
+                        <h3>Editar Perfil</h3>
+                        <br>
+                          <div>
+                            <md-input-container>
+                              <label>E-mail</label>
+                              <input type="email" name = "email" ng-required = "true" ng-model="userSelected.emailU" disabled>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Rut</label>
+                              <input type="text" name = "rut" ng-required = "true" ng-model="userSelected.rutU" disabled>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Nombre</label>
+                              <input type="text" name = "nombre" ng-required = "true" ng-model="userSelected.nombreU" disabled>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Apodo</label>
+                              <input type="text" name = "apodo" ng-required = "true" ng-model="apodo">
+                              <div ng-messages="edita"edita.apodo.$error">
+                                <div ng-message="required">Apodo requerido!</div>
+                              </div>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Contraseña</label>
+                              <input type="password" name = "pass" ng-model="pass">
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Confirmar Contraseña</label>
+                              <input type="password" name = "passC" ng-model="passC">
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Rol</label>
+                              <md-select ng-model="tipoSelected">
+                                <md-option ng-value = "tipo" ng-repeat="tipo in tiposUsuario">
+                                  {{tipo.nombreTU}}
+                                </md-option>
+                              </md-select>
+                            </md-input-container>
+                          </div>
+                          <br>
+                          <div layout = "column" layout-align = "center center">
+                            <md-button class="md-raised md-primary" ng-disabled = "edita.apodo.$invalid" ng-click="editar()">Actualizar</md-button>
+                            <md-button ng-click= "cancelar()">Cancelar</md-button>
+                          </div>
+                      </div>
+                      <!-- Segundo elemento de la row -->
+                      <div >
+                        <img ng-src="{{userSelected.fotoPerfilU}}" class="img-thumbnail" alt="Cinque Terre" width="240" height="240"> 
+                      </div>
+
+                      </div>
+                    </form>
+                  </div>
+
+                  <!-- Cerrar cuenta -->
+                  <div>
+                    <form name="cierre">
+                      <div layout = "column" layout-align="center center">
+                      <br>
+                        <h3>Cerrar Cuenta</h3>
+                        <br>
+                          <div>
+                            <md-input-container>
+                              <label>Motivo Cierre</label>
+                              <input type="text" name = "m" ng-required = "true" ng-model="motivoC" required = "true">
+                              <div ng-messages="cierre.m.$error">
+                                <div ng-message="required">Motivo requerido!</div>
+                              </div>
+                            </md-input-container>
+                          </div>
+                          <div layout = "column" layout-align="center center">
+                            <md-button class="md-raised md-primary" ng-disabled = "motivoC == null " ng-click="cerrarC()">Cerrar Cuenta</md-button>
+                            <md-button ng-click= "cancelar()">Cancelar</md-button>
+                          </div>
+                      </div>
+                    </form>
+                  </div>
+
+                  <!-- Eliminar cuenta -->
+                  <div>
+                    <form name="delete">
+                      <div layout = "column" layout-align="center center">
+                      <br>
+                        <h3>Eliminar Cuenta</h3>
+                        <br>
+                          <div>
+                            <md-input-container>
+                              <label>Motivo Eliminación</label>
+                              <input type="text" name = "me" ng-required = "true" ng-model="motivoE" required = "true">
+                              <div ng-messages="delete.me.$error">
+                                <div ng-message="required">Motivo requerido!</div>
+                              </div>
+                            </md-input-container>
+                          </div>
+                          <div layout = "column" layout-align="center center">
+                            <md-button class="md-raised md-primary" ng-disabled = "motivoE == null " ng-click="eliminarC()">Eliminar Cuenta</md-button>
+                            <md-button ng-click= "cancelar()">Cancelar</md-button>
+                          </div>
+                      </div>
+                    </form>
+                  </div>
+
+
+                </div>
+</md-content>

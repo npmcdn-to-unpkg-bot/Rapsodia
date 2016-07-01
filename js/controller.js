@@ -1,20 +1,168 @@
-var app = angular.module("mainApp", ["ngRoute", "ngCookies"]);
+var app = angular.module("mainApp", ["ngRoute", "ngCookies", "ngMaterial", "ngMessages", "dataGrid", "pagination", "ngFileUpload"]);
 
-app.run(function($rootScope, cookieFactory)
-{
-    $rootScope.$on('$routeChangeStart', function(){
-        //cookieFactory.checkStatus();
-    })
+app.run(function($rootScope, auth, sesion,cookieFactory){
+	$rootScope.auth = auth;
+    $rootScope.sesion = sesion;
 });
+app.controller("snCtrl", function($rootScope, $scope, $location, $mdToast, $timeout, $mdSidenav){
+	console.log("Controlador sideNav");
+	//Funciones alumno / ayudante
 
-app.controller("loginCtrl", function($scope, $location, $http, cookieFactory, restFactory){
+	$scope.perfilAA = function(){
+		console.log("Ver perfil alumno");
+		$location.path("/home/alumno/info");
+	}
+
+	//Funciones profesor
+
+	$scope.perfilP = function(){
+		console.log("Ver perfil profesor");
+		$location.path("/home/profesor/info");
+	}
+
+	$scope.crear = function(){
+		console.log("Función crear usuario");
+		$location.path("/home/profesor/crear");
+	}
+
+	$scope.ver = function(){
+		console.log("Función ver usuarios del sistema");
+		$location.path("/home/profesor/ver");
+	}
+
+	$scope.closeSide = function(sideId) {
+      $mdSidenav(sideId).close()
+        .then(function () {
+          $log.debug("close RIGHT is done");
+        });
+    }
+
+	$scope.toggleLeft = buildDelayedToggler('left');
+
+	function debounce(func, wait, context) {
+      var timer;
+
+      return function debounced() {
+        var context = $scope,
+            args = Array.prototype.slice.call(arguments);
+        $timeout.cancel(timer);
+        timer = $timeout(function() {
+          timer = undefined;
+          func.apply(context, args);
+        }, wait || 10);
+      };
+    }
+
+    function buildDelayedToggler(navID) {
+      return debounce(function() {
+        $mdSidenav(navID)
+          .toggle()
+          .then(function () {
+            $log.debug("toggle " + navID + " is done");
+          });
+      }, 200);
+    }
+
+    function buildToggler(navID) {
+      return function() {
+        $mdSidenav(navID)
+          .toggle()
+          .then(function () {
+            $log.debug("toggle " + navID + " is done");
+          });
+      }
+    }
+});
+app.controller("tbCtrl", function($rootScope, $scope, $location, $http, restFactory, $mdToast, $mdSidenav, $log, $timeout){
+
+	//Funciones usuario
+	$scope.close = function(){
+		console.log("Cerrar sesión");
+		$rootScope.sesion.destroy();
+		$location.path("/");
+	}
+
+	$scope.editP = function(){
+		console.log("Editar perfil");
+		$location.path("/home/alumno/editar");
+	}
+
+	//Funciones profesor
+
+	$scope.editProfe = function(){
+		console.log("Función editar perfil");
+		$location.path("/home/profesor/editar");
+	}
+
+	//Funciones sideNav
+	$scope.toggleLeft = buildDelayedToggler('left');
+
+	function debounce(func, wait, context) {
+      var timer;
+
+      return function debounced() {
+        var context = $scope,
+            args = Array.prototype.slice.call(arguments);
+        $timeout.cancel(timer);
+        timer = $timeout(function() {
+          timer = undefined;
+          func.apply(context, args);
+        }, wait || 10);
+      };
+    }
+
+    function buildDelayedToggler(navID) {
+      return debounce(function() {
+        $mdSidenav(navID)
+          .toggle()
+          .then(function () {
+            $log.debug("toggle " + navID + " is done");
+          });
+      }, 200);
+    }
+
+    function buildToggler(navID) {
+      return function() {
+        $mdSidenav(navID)
+          .toggle()
+          .then(function () {
+            $log.debug("toggle " + navID + " is done");
+          });
+      }
+    }
+});
+app.controller("loginCtrl", function($rootScope, $scope, $location, $http, restFactory, $mdToast){
 	console.log("Controlador login");
 	$scope.username = "";
 	$scope.password = "";
-	$scope.log = false;
-	$scope.mensaje = "";
+
+	$scope.toastPosition = {
+	    bottom: true,
+	    top: false,
+	    left: false,
+	    right: true,
+	    center: true
+  	};
+
+	$scope.getToastPosition = function() {
+	    return Object.keys($scope.toastPosition)
+	      .filter(function(pos) { return $scope.toastPosition[pos]; })
+	      .join(' ');
+	};
+
+	$scope.showSimpleToast = function(message) {
+	    $mdToast.show(
+	      $mdToast.simple()
+	        .content(message)
+	        .action("ok")
+	        .highlightAction(true)
+	        .highlightClass("md-accent")
+	        .position($scope.getToastPosition())
+	        .hideDelay(3000)
+	    );
+	};
 	
-	$scope.login = function(){
+	$scope.loginF = function(){
 		console.log("Función login");
 		if($scope.username != "" && $scope.password != ""){
 			restFactory.login({emailU: $scope.username, contrasenaU: $scope.password})
@@ -32,26 +180,24 @@ app.controller("loginCtrl", function($scope, $location, $http, cookieFactory, re
 					                console.log(response);
 					                var user = response;
 					                //guardando en la cookie el usuario logeado
-					                cookieFactory.putUser(user);
-					                cookieFactory.putEstadoSesion(true);
+					                $rootScope.sesion.setUser(user);
 					             	$location.path(resultado);
 					             });
 	                    	
 	                    }else{
 	                    	if(resultado == 'e'){
 	                    		console.log("Cuenta Eliminada");
-	                    		$scope.log = true;
-	                    		$scope.mensaje = "Cuenta eliminada";
-	                    		$location.path("/");
+	                    		$scope.showSimpleToast("Cuenta Eliminada");
 	                    	}else if(resultado == 'c'){
 	                    		console.log("Cuenta cerrada");
-	                    		$scope.log = true;
-	                    		$scope.mensaje = "Cuenta cerrada";
-	                    		$location.path("/");
+	                    		$scope.showSimpleToast("Cuenta Cerrada");
+	                    	}else{
+	                    		console.log("Contraseña incorrecta");
+	                    		$scope.showSimpleToast("E-mail o contraseña incorrecta");
 	                    	}
 	                    }
 	                    
-	                });
+	               	});
 		}
 	}
 
@@ -60,14 +206,38 @@ app.controller("loginCtrl", function($scope, $location, $http, cookieFactory, re
 		$location.path("/login/olvidoC");
 	}
 });
-app.controller("olvidoCtrl", function($scope, $routeParams, $location, $http, restFactory){
+app.controller("olvidoCtrl", function($rootScope, $scope, $routeParams, $location, $http, restFactory, $mdToast){
 
 	$scope.email = "";
-	$scope.mensaje = "";
 	$scope.respuesta = "";
 	$scope.usuario = {};
-	$scope.log = false;
 	$scope.sh = true;
+
+	$scope.toastPosition = {
+	    bottom: true,
+	    top: false,
+	    left: false,
+	    right: true,
+	    center: true
+  	};
+
+	  $scope.getToastPosition = function() {
+	    return Object.keys($scope.toastPosition)
+	      .filter(function(pos) { return $scope.toastPosition[pos]; })
+	      .join(' ');
+	  };
+
+	  $scope.showSimpleToast = function(message) {
+	    $mdToast.show(
+	      $mdToast.simple()
+	        .content(message)
+	        .action("ok")
+	        .highlightAction(true)
+	        .highlightClass("md-accent")
+	        .position($scope.getToastPosition())
+	        .hideDelay(3000)
+	    );
+	  };
 
 	$scope.back = function(){
 		$location.path("/");
@@ -76,15 +246,15 @@ app.controller("olvidoCtrl", function($scope, $routeParams, $location, $http, re
 	$scope.next = function(){
 		restFactory.getUserByEmail($scope.email)
 			.success(function (response) {
+				console.log("Recuperar");
 				if(response){
+					console.log("Entra la if");
 					if(response.estadoidEstado.nombreE == "Cerrada"){
 						console.log("Cuenta cerrada");
-						$scope.log = true;
-						$scope.mensaje = "Cuenta cerrada";
+						$scope.showSimpleToast("Cuenta Cerrada");
 					}else if(response.estadoidEstado.nombreE == "Eliminada"){
 						console.log("Cuenta eliminada");
-						$scope.log = true;
-						$scope.mensaje = "Cuenta eliminada";
+						$scope.showSimpleToast("Cuenta Eliminada");
 					}else{
 						$scope.usuario = response;
 						console.log($scope.usuario);
@@ -95,12 +265,8 @@ app.controller("olvidoCtrl", function($scope, $routeParams, $location, $http, re
 
 				}else{
 					console.log("Usuario no encontrado");
-					$scope.log = true;
-					$scope.mensaje = "Cuenta inexistente"
+					$scope.showSimpleToast("Cuenta inexistente");
 				}	
-
-			console.log("holax");
-				
 			});
 	}
 
@@ -108,315 +274,431 @@ app.controller("olvidoCtrl", function($scope, $routeParams, $location, $http, re
 		if($scope.usuario.respuestaU == $scope.respuesta){
 			console.log("Respuesta iguales");
 			//Se procede a enviar el mail
-			restFactory.recuperar($scope.usuario.emailU)
-			.success(function (response) {
-				if(response.message == "true"){
+			restFactory.sendEmail($scope.usuario.emailU, "r")
+			.success(function () {
 					console.log("E-mail enviado");
-					$location.path("/");
-				}else{
-					console.log("Error al enviar email");
-					$scope.log = true;
-					$scope.mensaje = "Error en la recuperación de su contraseña, intente más tarde";
-				}
-				
+					$scope.showSimpleToast("Recuperación efectuada");
+					$location.path("/");			
 			});
 		}
 		else{
 			console.log("Respuesta distintas");
-			$scope.log = true;
-			$scope.mensaje = "Respuesta inválida";
+			$scope.showSimpleToast("Respuesta incorrecta");
 		}
 	}
 });
-app.controller("homeCtrlAlum", function($scope, $location, $http, cookieFactory){
-	console.log("Controlador alumno home");
-	$scope.usuario = cookieFactory.getUser();
+app.controller("homeCtrlAlum", function($rootScope, $scope, $location, $http){
+	console.log("Ctrl Alum");
+	$scope.usuario = $rootScope.sesion.getUser();
+	console.log($scope.usuario);
 
-	$scope.close = function(){
-		console.log("Función cerrar sesión");
-		cookieFactory.removeUser();
-		cookieFactory.removeEstadoSesion();
-		$location.path("/");
-	}
-
-	$scope.editP = function(){
-		console.log("Función editar perfil");
+    $scope.editP = function(){
+		console.log("Editar perfil");
 		$location.path("/home/alumno/editar");
 	}
 
-	$scope.info = function(){
-		console.log("Función ver info");
-		$location.path("/home/alumno/info");
-	}
 	$scope.back = function(){
-		console.log("Función volver ");
+		console.log(" volver ");
 		$location.path("/home/alumno");
 	}
 });
-app.controller("editarAlumCtrl", function($scope, $location, cookieFactory, fileUpload, $http, restFactory){
+app.controller("editarAlumCtrl", function($rootScope, $scope, $location, $http, restFactory, $mdDialog, $mdToast, Upload){
 	console.log("Controlador alumno editar");
-	$scope.usuario = cookieFactory.getUser();
+	$scope.usuario = $rootScope.sesion.getUser();
 	$scope.pass = "";
 	$scope.passC = "";
 	$scope.fotoP = "";
 	$scope.apodo = $scope.usuario.apodoU;
-	
-	$scope.editar = function(){
+	//$scope.fileName = $scope.usuario.fotoPerfilU;
+	$scope.toastPosition = {
+	    bottom: true,
+	    top: false,
+	    left: false,
+	    right: true,
+	    center: true
+  	};
+
+	$scope.getToastPosition = function() {
+	    return Object.keys($scope.toastPosition)
+	      .filter(function(pos) { return $scope.toastPosition[pos]; })
+	      .join(' ');
+	};
+
+	$scope.showSimpleToast = function(message) {
+	    $mdToast.show(
+	      $mdToast.simple()
+	        .content(message)
+	        .action("ok")
+	        .highlightAction(true)
+	        .highlightClass("md-accent")
+	        .position($scope.getToastPosition())
+	        .hideDelay(3000)
+	    );
+	};
+
+	$scope.showAlert = function(contenido) {
+		$mdDialog.show(
+		      $mdDialog.alert()
+		        .parent(angular.element(document.querySelector('#popupContainer')))
+		        .clickOutsideToClose(true)
+		        .title('Información')
+		        .textContent(contenido)
+		        .ariaLabel('Alert Dialog Demo')
+		        .ok('Entendido!')
+		    );
+	};
+
+	$scope.editarP = function(){
 		console.log("Función editar");
-		var file = $scope.myFile;
-		console.log(file);
-			//Verificando que los valores entregados tengan un campo y no sean nulos
-			if($scope.apodo != "" || $scope.pass != "" || $scope.passC != "" || file != undefined){
-				if($scope.apodo != ""){
+		var file = $scope.file;
+			if((($scope.pass == undefined && $scope.passC == undefined) || ($scope.pass == "" && $scope.passC == "")) && $scope.apodo == $scope.usuario.apodoU && file == undefined ){
+				$scope.showAlert("No existen campos a modificar.");
+				return "";
+			}
+			if(( $scope.pass != undefined && $scope.passC != undefined) || ($scope.pass != "" && $scope.passC != "")){
+				if($scope.pass != $scope.passC){
+					$scope.showAlert("Contraseñas ingresadas no coinciden.");
+					return "";
+					}
+				if($scope.pass == $scope.usuario.contrasenaU){
+					$scope.showAlert("Contraseña ingresada es igual a la actual.");
+					return "";
+				}
+			}
+
+			var confirm = $mdDialog.confirm()
+					          .title('Desea actualizar su perfil?')
+					          .textContent('Su perfil será actualizado')
+					          .ariaLabel('Lucky day')
+					          .ok('Actualizar')
+					          .cancel('Cancelar');
+
+	          $mdDialog.show(confirm).then(function() {
+			    	console.log("confirmado");
+			    if(($scope.apodo != "" || $scope.apodo != undefined || $scope.apodo != null) && $scope.apodo != $scope.usuario.apodoU){
+					console.log($scope.apodo);
 					$scope.usuario.apodoU = $scope.apodo;
 					console.log("Nuevo apodo: "+$scope.usuario.apodoU);
-				}
-				if($scope.pass != "" && $scope.passC != "" ){
-					if($scope.pass == $scope.passC && $scope.pass != $scope.usuario.contraseñaU){
-						$scope.usuario.contrasenaU = $scope.pass;
-						console.log("Nueva contraseña: "+$scope.pass);
-						console.log("Nueva contraseñaC: "+$scope.passC);
-					}
+				}	
+				
+				if(($scope.pass == undefined && $scope.passC == undefined) || ($scope.pass == "" && $scope.passC == "")){
+					
+				}else{
+					console.log("entra al else");
+					$scope.usuario.contrasenaU = $scope.pass;
+					console.log("Nueva contraseña: "+$scope.pass);
+					console.log("Nueva contraseñaC: "+$scope.passC);
 				}
 				if(file != undefined){
-					console.log("File is ");
-					console.dir(file);
+					console.log(file);
+					console.log(file.name);
 					$scope.usuario.fotoPerfilU = "img/"+file.name;
-					var uploadUrl = "server.php";
-					fileUpload.uploadFileToUrl(file, uploadUrl);
 				}
-
+				
+				if(file != undefined){
+					Upload.upload({
+				            url: 'server.php',
+				            data: {file: file, 'username': $scope.usuario.rutU}
+				        }).then(function (resp) {
+				            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+				            restFactory.editarUsuario($scope.usuario)
+									.success(function(response){
+										if(response.message == "true"){
+											console.log("Edición efectuada");
+											restFactory.getUserByEmail($scope.usuario.emailU)
+								               .success(function (response){
+								                console.log(response);
+								                var user = response;
+								                $rootScope.sesion.setUser(user);
+								                $scope.showSimpleToast("Edición efectuada");
+								                restFactory.sendEmail($scope.usuario.emailU, "e");
+								             });
+										}
+								});
+				        });
+				}else{
 					restFactory.editarUsuario($scope.usuario)
 						.success(function(response){
 							if(response.message == "true"){
 								console.log("Edición efectuada");
-								console.log("Actualizando usuario en la cookie");
 								restFactory.getUserByEmail($scope.usuario.emailU)
 					               .success(function (response){
 					                console.log(response);
 					                var user = response;
-					                //Guardando en la cookie el usuario logeado
-					                cookieFactory.removeUser();
-					                cookieFactory.putUser(user);
-					                $scope.usuario = cookieFactory.getUser();
-					                $location.path("/home/alumno/info");
+					                $rootScope.sesion.setUser(user);
+					                $scope.showSimpleToast("Edición efectuada");
+					                restFactory.sendEmail($scope.usuario.emailU, "e");
 					             });
 							}
 					});
-			}
-			else{
-				console.log("al menos uno de los campos debe ser modificado");
-			}	
+				}	
+				$location.path("/home/alumno/info");					
+			    	return "";
+			    }, function() {
+			    	console.log("cancelado");
+			    	return "";
+			    });
 	}
 
 	$scope.cerrarC = function(){
 		var motivo = $scope.motivoC;
-		if(motivo != ""){
-			restFactory.cerrarEliminar($scope.usuario.idUsuario, motivo, "c")
+			var confirm = $mdDialog.confirm()
+	          .title('Desea cerrar su cuenta?')
+	          .textContent('Su cuenta será cerrada')
+	          .ariaLabel('Lucky day')
+	          .ok('Cerrar')
+	          .cancel('Cancelar');
+
+	          $mdDialog.show(confirm).then(function() {
+			    	console.log("confirmado");
+			    	restFactory.cerrarEliminar($scope.usuario.rutU, motivo, "c")
 							.success(function(response){
 								if(response.message == "true"){
-									cookieFactory.removeUser();
-									cookieFactory.removeEstadoSesion();
+									restFactory.sendEmail($scope.usuario.emailU, "c");
+									$rootScope.sesion.destroy();
+									$scope.showSimpleToast("Borrando cuenta, se le enviará un correo electrónico");
 									$location.path("/");				
 								}
 						});
-		}else{
-			console.log("Debe ingresar el motivo");
-		}
-
+			    	return "";
+			    }, function() {
+			    	console.log("cancelado");
+			    	return "";
+			    });
 	}
 
 	$scope.cancelar = function(){
 		console.log("Función cancelar");
 		$location.path("/home/alumno");
 	}
-
-	$scope.close = function(){
-		console.log("Función cerrar sesión");
-		cookieFactory.removeUser();
-		cookieFactory.removeEstadoSesion();
-		$location.path("/");
-	}
-
-	$scope.editP = function(){
-		console.log("Función editar perfil");
-		$location.path("/home/alumno/editar");
-	}
-
-	$scope.info = function(){
-		console.log("Función ver info");
-		$location.path("/home/alumno/info");
-	}
 });
-app.controller("homeCtrlProfe", function($scope, $location, $http, cookieFactory){
-	console.log("Controlador profesor home");
-	$scope.usuario = cookieFactory.getUser();
-
-	$scope.close = function(){
-		console.log("Función cerrar sesión");
-		cookieFactory.removeUser();
-		cookieFactory.removeEstadoSesion();
-		$location.path("/");
-	}
+app.controller("homeCtrlProfe", function($rootScope, $scope, $location, $http){
+	console.log("Ctrl Profe");
+	$scope.usuario = $rootScope.sesion.getUser();
 
 	$scope.editP = function(){
 		console.log("Función editar perfil");
 		$location.path("/home/profesor/editar");
 	}
 
-	$scope.info = function(){
-		console.log("Función ver info");
-		$location.path("/home/profesor/info");
-	}
-
-	$scope.crear = function(){
-		console.log("Función crear usuario");
-		$location.path("/home/profesor/crear");
-	}
-
-	$scope.ver = function(){
-		console.log("Función ver usuarios del sistema");
-		$location.path("/home/profesor/ver");
-	}
-
 	$scope.back = function(){
-		console.log("Función ver usuarios del sistema");
+		console.log("Función volver atras");
 		$location.path("/home/profesor");
 	}
 });
-app.controller("editarProfeCtrl", function($scope, $location, $http, cookieFactory, fileUpload, restFactory){
+app.controller("editarProfeCtrl", function($rootScope, $scope, $location, $http, fileUpload, restFactory, $mdDialog, $mdMedia, $mdToast, Upload){
 
 	console.log("Controlador profesor editar");
-	$scope.usuario = cookieFactory.getUser();
+	$scope.usuario = $rootScope.sesion.getUser();
 	$scope.pass = "";
 	$scope.passC = "";
 	$scope.fotoP = "";
 	$scope.apodo = $scope.usuario.apodoU;
 
-	$scope.editar = function(){
+	$scope.toastPosition = {
+	    bottom: true,
+	    top: false,
+	    left: false,
+	    right: true,
+	    center: true
+  	};
+
+	$scope.getToastPosition = function() {
+	    return Object.keys($scope.toastPosition)
+	      .filter(function(pos) { return $scope.toastPosition[pos]; })
+	      .join(' ');
+	};
+
+	$scope.showSimpleToast = function(message) {
+	    $mdToast.show(
+	      $mdToast.simple()
+	        .content(message)
+	        .action("ok")
+	        .highlightAction(true)
+	        .highlightClass("md-accent")
+	        .position($scope.getToastPosition())
+	        .hideDelay(3000)
+	    );
+	};
+
+	$scope.showAlert = function(contenido) {
+		$mdDialog.show(
+		      $mdDialog.alert()
+		        .parent(angular.element(document.querySelector('#popupContainer')))
+		        .clickOutsideToClose(true)
+		        .title('Información')
+		        .textContent(contenido)
+		        .ariaLabel('Alert Dialog Demo')
+		        .ok('Entendido!')
+		    );
+	};
+
+	$scope.editarP = function(){
 		console.log("Función editar");
-		var file = $scope.myFile;
-		console.log(file);
-			//Verificando que los valores entregados tengan un campo y no sean nulos
-			if($scope.apodo != "" || $scope.pass != "" || $scope.passC != "" || file != undefined){
-				if($scope.apodo != ""){
+		var file = $scope.file;
+			if((($scope.pass == undefined && $scope.passC == undefined) || ($scope.pass == "" && $scope.passC == "")) && $scope.apodo == $scope.usuario.apodoU && file == undefined ){
+				$scope.showAlert("No existen campos a modificar.");
+				return "";
+			}
+			if(( $scope.pass != undefined && $scope.passC != undefined) || ($scope.pass != "" && $scope.passC != "")){
+				if($scope.pass != $scope.passC){
+					$scope.showAlert("Contraseñas ingresadas no coinciden.");
+					return "";
+					}
+				if($scope.pass == $scope.usuario.contrasenaU){
+					$scope.showAlert("Contraseña ingresada es igual a la actual.");
+					return "";
+				}
+			}
+
+	    		var confirm = $mdDialog.confirm()
+			          .title('Desea actualizar su perfil?')
+			          .textContent('Su perfil será actualizado')
+			          .ariaLabel('Lucky day')
+			          .ok('Actualizar')
+			          .cancel('Cancelar');
+
+			    $mdDialog.show(confirm).then(function() {
+			    	console.log("confirmado");
+			    	if(($scope.apodo != "" || $scope.apodo != undefined || $scope.apodo != null) && $scope.apodo != $scope.usuario.apodoU){
+					console.log($scope.apodo);
 					$scope.usuario.apodoU = $scope.apodo;
 					console.log("Nuevo apodo: "+$scope.usuario.apodoU);
 				}
-				if($scope.pass != "" && $scope.passC != "" ){
-					if($scope.pass == $scope.passC && $scope.pass != $scope.usuario.contraseñaU){
-						$scope.usuario.contrasenaU = $scope.pass;
-						console.log("Nueva contraseña: "+$scope.pass);
-						console.log("Nueva contraseñaC: "+$scope.passC);
-					}
+				
+				if(($scope.pass == undefined && $scope.passC == undefined) || ($scope.pass == "" && $scope.passC == "")){
+					console.log($scope.pass);
+					console.log("no hacer nada");
+					
+				}else{
+					console.log("entra al else");
+					$scope.usuario.contrasenaU = $scope.pass;
+					console.log("Nueva contraseña: "+$scope.pass);
+					console.log("Nueva contraseñaC: "+$scope.passC);
 				}
 				if(file != undefined){
-					console.log("File is ");
-					console.dir(file);
+					console.log(file);
+					console.log(file.name);
 					$scope.usuario.fotoPerfilU = "img/"+file.name;
-					var uploadUrl = "server.php";
-					fileUpload.uploadFileToUrl(file, uploadUrl);
+
 				}
-					$http.post("http://localhost:8080/RAPSO-web/webresources/usuario/editarUsuario", $scope.usuario)
+
+				//
+					if(file != undefined){
+					Upload.upload({
+				            url: 'server.php',
+				            data: {file: file, 'username': $scope.usuario.rutU}
+				        }).then(function (resp) {
+				            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+				            restFactory.editarUsuario($scope.usuario)
+									.success(function(response){
+										if(response.message == "true"){
+											console.log("Edición efectuada");
+											restFactory.getUserByEmail($scope.usuario.emailU)
+								               .success(function (response){
+								                console.log(response);
+								                var user = response;
+								                $rootScope.sesion.setUser(user);
+								                $scope.showSimpleToast("Edición efectuada");
+								                restFactory.sendEmail($scope.usuario.emailU, "e");
+								             });
+										}
+								});
+				        });
+				}else{
+					restFactory.editarUsuario($scope.usuario)
 						.success(function(response){
 							if(response.message == "true"){
 								console.log("Edición efectuada");
-								console.log("Actualizando usuario en la cookie");
-								$http.get("http://localhost:8080/RAPSO-web/webresources/usuario/getUserByEmail/"+$scope.usuario.emailU)
+								restFactory.getUserByEmail($scope.usuario.emailU)
 					               .success(function (response){
 					                console.log(response);
 					                var user = response;
-					                //guardando en la cookie el usuario logeado
-					                cookieFactory.removeUser();
-					                cookieFactory.putUser(user);
-					                $scope.usuario = cookieFactory.getUser();
-					                $location.path("/home/profesor/info");
+					                $rootScope.sesion.setUser(user);
+					                $scope.showSimpleToast("Edición efectuada");
+					                restFactory.sendEmail($scope.usuario.emailU, "e");
 					             });
 							}
 					});
-			}
-			else{
-				console.log("al menos uno de los campos debe ser modificado");
-			}	
-	}
+				}	
+				 $location.path("/home/profesor/info");
+				//
 
+					return "";
+			    }, function() {
+			    	console.log("cancelado");
+			    	return "";
+			    });			
+	}
 
 	$scope.cerrarC = function(){
 		var motivo = $scope.motivoC;
-		if(motivo != ""){
-			$http.post("http://localhost:8080/RAPSO-web/webresources/usuario/cerrarEliminar/"+$scope.usuario.idUsuario+"/"+motivo+"/"+"c")
-							.success(function(response){
+	    		var confirm = $mdDialog.confirm()
+			          .title('Desea cerrar su cuenta?')
+			          .textContent('La cuenta será cerrada')
+			          .ariaLabel('Lucky day')
+			          .ok('Cerrar')
+			          .cancel('Cancelar');
+
+			    $mdDialog.show(confirm).then(function() {
+			    	console.log("confirmado");
+			    	restFactory.cerrarEliminar($scope.usuario.rutU, motivo, "c")
+			    		.success(function(response){
 								if(response.message == "true"){
-									cookieFactory.removeUser();
-									cookieFactory.removeEstadoSesion();
+									restFactory.sendEmail($scope.usuario.emailU, "c");
+									$scope.showSimpleToast("Borrando cuenta, se le enviará un correo electrónico");
+									$rootScope.sesion.destroy();
 									$location.path("/");				
 								}
 						});
-		}else{
-			console.log("Debe ingresar el motivo");
-		}
-
+			    	return "";
+			    }, function() {
+			    	console.log("cancelado");
+			    	return "";
+			    });				
 	}
 
 	$scope.eliminarC = function(){
 		console.log("entra  al afuncioón eleiminar");
 		var motivo = $scope.motivoE;
-		if(motivo != ""){
-			$http.post("http://localhost:8080/RAPSO-web/webresources/usuario/cerrarEliminar/"+$scope.usuario.idUsuario+"/"+motivo+"/"+"e")
-							.success(function(response){
+			var confirm = $mdDialog.confirm()
+			          .title('Desea eliminar su cuenta?')
+			          .textContent('La cuenta será eliminada')
+			          .ariaLabel('Lucky day')
+			          .ok('Eliminar')
+			          .cancel('Cancelar');
+
+			    $mdDialog.show(confirm).then(function() {
+			    	console.log("confirmado");
+
+			    	restFactory.cerrarEliminar($scope.usuario.rutU, motivo, "e")
+			    		.success(function(response){
 								if(response.message == "true"){
-									cookieFactory.removeUser();
-									cookieFactory.removeEstadoSesion();
+									restFactory.sendEmail($scope.usuario.emailU, "d");
+									$scope.showSimpleToast("Eliminando cuenta, se le enviará un correo electrónico");
+									$rootScope.sesion.destroy();
 									$location.path("/");				
 								}
 						});
-		}else{
-			console.log("Debe ingresar el motivo");
-		}
-
+			    	return "";
+			    }, function() {
+			    	console.log("cancelado");
+			    	return "";
+			    });	
+			
 	}
 	
-	$scope.close = function(){
-		console.log("Función cerrar sesión");
-		cookieFactory.removeUser();
-		cookieFactory.removeEstadoSesion();
-		$location.path("/");
-	}
-
-	$scope.editP = function(){
-		console.log("Función editar perfil");
-		$location.path("/home/profesor/editar");
-	}
-
-	$scope.info = function(){
-		console.log("Función ver info");
-		$location.path("/home/profesor/info");
-	}
-
-	$scope.crear = function(){
-		console.log("Función crear usuario");
-		$location.path("/home/profesor/crear");
-	}
-
-	$scope.ver = function(){
-		console.log("Función ver usuarios del sistema");
-		$location.path("/home/profesor/ver");
-	}
 
 	$scope.cancelar = function(){
 		console.log("Función cancelar");
 		$location.path("/home/profesor");
 	}
 });
-app.controller("crearProfeCtrl", function($scope, $location, $http, cookieFactory, restFactory){
+app.controller("crearProfeCtrl", function($rootScope, $scope, $location, $http, restFactory, $mdDialog, $mdToast){
 
 	console.log("Controlador profesor crear");
-	$scope.usuario = cookieFactory.getUser();
-
 	$scope.newUsuario = {};
 	$scope.passC = "";
-	$scope.log = false;
-	$scope.message = "";
 	$scope.tiposUsuario = {};
 	$scope.estados = {};
 	$scope.tipoSelected = {};
@@ -431,14 +713,53 @@ app.controller("crearProfeCtrl", function($scope, $location, $http, cookieFactor
 		 $scope.tipoSelected = response[0];
 	});
 
+	$scope.nombreTU = "";
+
+	$scope.toastPosition = {
+	    bottom: true,
+	    top: false,
+	    left: false,
+	    right: true,
+	    center: true
+  	};
+
+	$scope.getToastPosition = function() {
+	    return Object.keys($scope.toastPosition)
+	      .filter(function(pos) { return $scope.toastPosition[pos]; })
+	      .join(' ');
+	};
+
+	$scope.showSimpleToast = function(message) {
+	    $mdToast.show(
+	      $mdToast.simple()
+	        .content(message)
+	        .action("ok")
+	        .highlightAction(true)
+	        .highlightClass("md-accent")
+	        .position($scope.getToastPosition())
+	        .hideDelay(3000)
+	    );
+	};
+
+	$scope.showAlert = function(contenido) {
+		$mdDialog.show(
+		      $mdDialog.alert()
+		        .parent(angular.element(document.querySelector('#popupContainer')))
+		        .clickOutsideToClose(true)
+		        .title('Información')
+		        .textContent(contenido)
+		        .ariaLabel('Alert Dialog Demo')
+		        .ok('Entendido!')
+		    );
+	};
+
 	$scope.crearU = function(){
 
 		if($scope.newUsuario.contrasenaU != $scope.passC){
-			$scope.log = true;
-			$scope.message = "Contraseñas no coinciden";
-		}else{
-			$scope.log = false;
-			$scope.message = "";
+			$scope.showAlert("Contraseñas ingresadas no coinciden.");
+			return "";
+		}
+		else{
 			$scope.newUsuario.fotoPerfilU = "img/estandar.jpg";
 			console.log("NUEVO USUARIO");
 			console.log($scope.newUsuario);
@@ -448,29 +769,28 @@ app.controller("crearProfeCtrl", function($scope, $location, $http, cookieFactor
 			$scope.newUsuario.estadoidEstado.nombreE = "Abierta";
 			$scope.newUsuario.tipoUsuarioidTipoUsuario.idTipoUsuario = $scope.tipoSelected.idTipoUsuario;
 			$scope.newUsuario.tipoUsuarioidTipoUsuario.nombreTU = $scope.tipoSelected.nombreTU;
-			//$scope.newUsuario.idUsuario = ""+$scope.tipoSelected.idTipoUsuario+""+$scope.estadoSelected.idEstado+"";
-			//console.log("idUsuario: "+$scope.newUsuario.idUsuario);
 			restFactory.crearUsuario($scope.newUsuario)
 						.success(function(response){
 							if(response.message == "true"){
 								console.log("Creación efectuada");
+								$scope.showSimpleToast("Usuario creado, se le notificará por e-mail esta situación");
+								restFactory.sendEmail($scope.newUsuario.emailU, "n");
 								$location.path("/home/profesor/info/"+$scope.newUsuario.emailU);
 
 							}else if(response.message == "r"){
 								console.log("Rut existente");
-								$scope.log = true;
-								$scope.message = "Rut registrado";
+								$scope.showAlert("El rut ingresado se encuentra registrado.");
+								return "";
 
 							}else if(response.message == "e"){
 								console.log("Email existente");
-								$scope.log = true;
-								$scope.message = "Email registrado";
-
+								$scope.showAlert("El e-mail ingresado se encuentra registrado.");
+								return "";
 							}else{
 								//false
 								console.log("Usuario existente");
-								$scope.log = true;
-								$scope.message = "Usuario existente";
+								$scope.showAlert("Rut y e-mail ingresados se encuentran registrados.");
+								return "";
 							}
 					});
 
@@ -481,81 +801,29 @@ app.controller("crearProfeCtrl", function($scope, $location, $http, cookieFactor
 		console.log("Función cancelar");
 		$location.path("/home/profesor");
 	}
-
-	$scope.close = function(){
-		console.log("Función cerrar sesión");
-		cookieFactory.removeUser();
-		cookieFactory.removeEstadoSesion();
-		$location.path("/");
-	}
-
-	$scope.editP = function(){
-		console.log("Función editar perfil");
-		$location.path("/home/profesor/editar");
-	}
-
-	$scope.info = function(){
-		console.log("Función ver info");
-		$location.path("/home/profesor/info");
-	}
-
-	$scope.crear = function(){
-		console.log("Función crear usuario");
-		$location.path("/home/profesor/crear");
-	}
-
-	$scope.ver = function(){
-		console.log("Función ver usuarios del sistema");
-		$location.path("/home/profesor/ver");
-	}
 });
-app.controller("cuentasCtrlProfe", function($scope, $location, $http, cookieFactory, restFactory){
+app.controller("cuentasCtrlProfe", function($rootScope, $scope, $location, $http, restFactory){
 	console.log("Controlador profesor cuentas");
-	$scope.usuario = cookieFactory.getUser();
-
-	$scope.usuarios = {};
+		$scope.gridOptions = {
+            data: [],
+            urlSync: false
+    };
 
 	restFactory.getAllUsers()
 		.success(function (response){
 		console.log(response);
-		$scope.usuarios = response;
+		$scope.gridOptions.data = response;
 	});
+
+	$scope.usuario = $rootScope.sesion.getUser();	
 
 	$scope.sendEdicion = function(emailU){
 		console.log("Función send Edición");
 		$location.path("/home/profesor/info/"+emailU);
 	}
-
-	$scope.close = function(){
-		console.log("Función cerrar sesión");
-		cookieFactory.removeUser();
-		cookieFactory.removeEstadoSesion();
-		$location.path("/");
-	}
-
-	$scope.editP = function(){
-		console.log("Función editar perfil");
-		$location.path("/home/profesor/editar");
-	}
-
-	$scope.info = function(){
-		console.log("Función ver info");
-		$location.path("/home/profesor/info");
-	}
-
-	$scope.crear = function(){
-		console.log("Función crear usuario");
-		$location.path("/home/profesor/crear");
-	}
-
-	$scope.ver = function(){
-		console.log("Función ver usuarios del sistema");
-		$location.path("/home/profesor/ver");
-	}
 });
-app.controller("infoCtrlProfe", function($scope, $location, $http, cookieFactory, $routeParams, restFactory){
+app.controller("infoCtrlProfe", function($rootScope, $scope, $location, $http, $routeParams, restFactory){
 	console.log("Controlador profesor home");
-	$scope.usuario = cookieFactory.getUser();
 
 	$scope.emailUSelected = $routeParams.emailU;
 
@@ -573,48 +841,24 @@ app.controller("infoCtrlProfe", function($scope, $location, $http, cookieFactory
 		$location.path("/home/profesor/ver");
 	}
 
-	$scope.close = function(){
-		console.log("Función cerrar sesión");
-		cookieFactory.removeUser();
-		cookieFactory.removeEstadoSesion();
-		$location.path("/");
-	}
-
 	$scope.editP = function(){
 		console.log("Función editar perfil");
 		$location.path("/home/profesor/editar/"+$scope.emailUSelected);
 	}
-
-	$scope.info = function(){
-		console.log("Función ver info");
-		$location.path("/home/profesor/info");
-	}
-
-	$scope.crear = function(){
-		console.log("Función crear usuario");
-		$location.path("/home/profesor/crear");
-	}
-
-	$scope.ver = function(){
-		console.log("Función ver usuarios del sistema");
-		$location.path("/home/profesor/ver");
-	}
 });
-app.controller("editarPCtrl", function($scope, $location, $http, cookieFactory, fileUpload, $routeParams, restFactory){
+app.controller("editarPCtrl", function($rootScope, $scope, $location, $http, fileUpload, $routeParams, restFactory, $mdDialog, $mdToast){
 
 	console.log("Controlador profesor editar selected");
-	$scope.usuario = cookieFactory.getUser();
 	$scope.userSelected = {};
 	$scope.tiposUsuario = {};
 	$scope.estados = {};
 	$scope.tipoSelected = {};
-	$scope.estadoSelected = {};
 	$scope.pass = "";
 	$scope.passC = "";
 	$scope.fotoP = "";
 	$scope.email = $routeParams.emailU;
 	$scope.apodo = "";
-	
+
 	restFactory.getUserByEmail($scope.email)
 		.success(function (response){
 		console.log("Email: "+$scope.email);
@@ -622,106 +866,179 @@ app.controller("editarPCtrl", function($scope, $location, $http, cookieFactory, 
 		console.log(response);
 		$scope.userSelected = response;
 		$scope.apodo = $scope.userSelected.apodoU;
-		$scope.tipoSelected = $scope.userSelected.tipoUsuarioidTipoUsuario;
-	});
 
 		//Obteniendo tipos de usuarios
 		restFactory.tipoUsuarios()
 			.success(function (response){
 			 console.log(response);
 			 $scope.tiposUsuario = response;
+			 var i;
+			 for (i = 0; i < response.length; i++) { 
+				    if(response[i].idTipoUsuario == $scope.userSelected.tipoUsuarioidTipoUsuario.idTipoUsuario){
+				    	$scope.tipoSelected = response[i];
+				    	break;
+				    }
+				}	
+
 		});
+	});
+	
+	$scope.toastPosition = {
+	    bottom: true,
+	    top: false,
+	    left: false,
+	    right: true,
+	    center: true
+  	};
+
+	$scope.getToastPosition = function() {
+	    return Object.keys($scope.toastPosition)
+	      .filter(function(pos) { return $scope.toastPosition[pos]; })
+	      .join(' ');
+	};
+
+	$scope.showSimpleToast = function(message) {
+	    $mdToast.show(
+	      $mdToast.simple()
+	        .content(message)
+	        .action("ok")
+	        .highlightAction(true)
+	        .highlightClass("md-accent")
+	        .position($scope.getToastPosition())
+	        .hideDelay(3000)
+	    );
+	};
+
+	$scope.showAlert = function(contenido) {
+
+		$mdDialog.show(
+		      $mdDialog.alert()
+		        .parent(angular.element(document.querySelector('#popupContainer')))
+		        .clickOutsideToClose(true)
+		        .title('Información')
+		        .textContent(contenido)
+		        .ariaLabel('Alert Dialog Demo')
+		        .ok('Entendido!')
+		    );
+	};
 
 	$scope.editar = function(){
 		console.log("Función editar");
-			//Verificando que los valores entregados tengan un campo y no sean nulos
-			if($scope.apodo != "" || $scope.pass != "" || $scope.passC != ""){
-				if($scope.apodo != ""){
+			if((($scope.pass == undefined && $scope.passC == undefined) || ($scope.pass == "" && $scope.passC == "")) && $scope.apodo == $scope.userSelected.apodoU && $scope.tipoSelected.idTipoUsuario == $scope.userSelected.tipoUsuarioidTipoUsuario.idTipoUsuario){
+				$scope.showAlert("No existen campos a modificar.");
+				return "";
+			}
+			if(( $scope.pass != undefined && $scope.passC != undefined) || ($scope.pass != "" && $scope.passC != "")){
+				if($scope.pass != $scope.passC){
+					$scope.showAlert("Contraseñas ingresadas no coinciden.");
+					return "";
+					}
+				if($scope.pass == $scope.userSelected.contrasenaU){
+					$scope.showAlert("Contraseña ingresada es igual a la actual.");
+					return "";
+				}
+			}
+
+			var confirm = $mdDialog.confirm()
+	          .title('Desea actualizar el perfil?')
+	          .textContent('El perfil del usuario será actualizado')
+	          .ariaLabel('Lucky day')
+	          .ok('Actualizar')
+	          .cancel('Cancelar');
+			    $mdDialog.show(confirm).then(function() {
+			      console.log("confirmado");
+			      	if(($scope.apodo != "" || $scope.apodo != undefined || $scope.apodo != null) && $scope.apodo != $scope.userSelected.apodoU){
+					console.log($scope.apodo);
 					$scope.userSelected.apodoU = $scope.apodo;
 					console.log("Nuevo apodo: "+$scope.userSelected.apodoU);
-				}
-				if($scope.pass != "" && $scope.passC != "" ){
-					if($scope.pass == $scope.passC && $scope.pass != $scope.userSelected.contraseñaU){
-						$scope.userSelected.contrasenaU = $scope.pass;
-						console.log("Nueva contraseña: "+$scope.pass);
-						console.log("Nueva contraseñaC: "+$scope.passC);
 					}
+				
+				if(($scope.pass == undefined && $scope.passC == undefined) || ($scope.pass == "" && $scope.passC == "")){
+					console.log($scope.pass);
+					console.log("no hacer nada");
+					
+				}else{
+					console.log("entra al else");
+					$scope.userSelected.contrasenaU = $scope.pass;
+					console.log("Nueva contraseña: "+$scope.pass);
+					console.log("Nueva contraseñaC: "+$scope.passC);
 				}
+
 				if($scope.tipoSelected.idTipoUsuario != $scope.userSelected.tipoUsuarioidTipoUsuario.idTipoUsuario){
 					$scope.userSelected.tipoUsuarioidTipoUsuario.idTipoUsuario = $scope.tipoSelected.idTipoUsuario;
 					$scope.userSelected.tipoUsuarioidTipoUsuario.nombreTU = $scope.tipoSelected.nombreTU;
 				}
-					restFactory.editarUsuario($scope.userSelected)
+
+				restFactory.editarUsuario($scope.userSelected)
 						.success(function(response){
 							if(response.message == "true"){
 								console.log("Edición efectuada");
+								$scope.showSimpleToast("Edición efectuada");
+								restFactory.sendEmail($scope.userSelected.emailU, "e");
 							    $location.path("/home/profesor/info/"+$scope.userSelected.emailU);
 							}
 					});
-			}
-			else{
-				console.log("al menos uno de los campos debe ser modificado");
-			}	
+			      return "";
+			    }, function() {
+			    	console.log("cancelado");
+			    	return "";
+			     
+			    });
 	}
-
 
 	$scope.cerrarC = function(){
 		var motivo = $scope.motivoC;
-		if(motivo != ""){
-			restFactory.cerrarEliminar($scope.userSelected.idUsuario, motivo, "c")
+
+		var confirm = $mdDialog.confirm()
+          .title('Desea cerrar la cuenta?')
+          .textContent('La cuenta del usuario será cerrada')
+          .ariaLabel('Lucky day')
+          .ok('Cerrar')
+          .cancel('Cancelar');
+		    $mdDialog.show(confirm).then(function() {
+		      console.log("confirmado");
+		      restFactory.cerrarEliminar($scope.userSelected.rutU, motivo, "c")
 							.success(function(response){
 								if(response.message == "true"){
+									$scope.showSimpleToast("Borrando cuenta, se le enviará un correo electrónico");
+									restFactory.sendEmail($scope.userSelected.emailU, "c");
 									$location.path("/home/profesor/ver");				
 								}
 						});
-		}else{
-			console.log("Debe ingresar el motivo");
-		}
-
+		      return "";
+		    }, function() {
+		    	console.log("cancelado");
+		      return "";
+		    });
 	}
 
 	$scope.eliminarC = function(){
 		console.log("entra a la función eliminar");
 		var motivo = $scope.motivoE;
-		if(motivo != ""){
-			restFactory.cerrarEliminar($scope.userSelected.idUsuario, motivo, "e")
+
+		var confirm = $mdDialog.confirm()
+          .title('Desea eliminar la cuenta?')
+          .textContent('La cuenta del usuario será eliminada')
+          .ariaLabel('Lucky day')
+          .ok('Eliminar')
+          .cancel('Cancelar');
+		    $mdDialog.show(confirm).then(function() {
+		      console.log("confirmado");
+		      restFactory.cerrarEliminar($scope.userSelected.rutU, motivo, "e")
 							.success(function(response){
 								if(response.message == "true"){
+									$scope.showSimpleToast("Eliminando cuenta, se le enviará un correo electrónico");
+									restFactory.sendEmail($scope.userSelected.emailU, "d");
 									$location.path("/home/profesor/ver");				
 								}
 						});
-		}else{
-			console.log("Debe ingresar el motivo");
-		}
+		      return "";
+		    }, function() {
+		    	console.log("cancelado");
+		      return "";
+		    });
 	}
 	
-	$scope.close = function(){
-		console.log("Función cerrar sesión");
-		cookieFactory.removeUser();
-		cookieFactory.removeEstadoSesion();
-		$location.path("/");
-	}
-
-	$scope.editP = function(){
-		console.log("Función editar perfil");
-		$location.path("/home/profesor/editar");
-	}
-
-	$scope.info = function(){
-		console.log("Función ver info");
-		$location.path("/home/profesor/info");
-	}
-
-	$scope.crear = function(){
-		console.log("Función crear usuario");
-		$location.path("/home/profesor/crear");
-	}
-
-	$scope.ver = function(){
-		console.log("Función ver usuarios del sistema");
-		$location.path("/home/profesor/ver");
-	}
-
 	$scope.cancelar = function(){
 		console.log("Función cancelar");
 		$location.path("/home/profesor");

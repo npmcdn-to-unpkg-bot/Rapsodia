@@ -28,32 +28,6 @@ app.factory("cookieFactory", ["$cookieStore", "$location", "$http", function($co
 		$cookieStore.remove("estadoS");
 	};
 
-	cookieFactory.checkStatus = function(){
-		var rutasPrivadas = ["/","/home/alumno"];
-	        if(cookieFactory.in_array($location.path(),rutasPrivadas) && !cookieFactory.getEstadoSesion())
-	        {
-	            $location.path("/");
-	        }
-	        //en el caso de que intente acceder al login y ya haya iniciado sesión lo mandamos a la home
-	        if(cookieFactory.in_array("/",rutasPrivadas) && cookieFactory.getEstadoSesion())
-	        {
-	        	$location.path("/home/alumno");
-	        }
-	};
-
-
-	cookieFactory.in_array = function(needle, haystack){
-		var key = '';
-            for(key in haystack)
-            {
-                if(haystack[key] == needle)
-                {
-                    return true;
-                }
-            }
-            return false;
-	};
-
 	return cookieFactory;
 }]);
 
@@ -69,16 +43,16 @@ app.factory("restFactory", ["$http", function($http){
 		return $http.get("http://localhost:8080/RAPSO-web/webresources/usuario/getUserByEmail/"+email);
 	};
 
-	restFactory.recuperar = function(email){
-		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/recuperar/"+email);
+	restFactory.sendEmail = function(email, op){
+		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/sendEmail/"+email+"/"+op);
 	};
 
 	restFactory.editarUsuario = function(usuario){
 		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/editarUsuario", usuario);
 	};
 
-	restFactory.cerrarEliminar = function(idUsuario, motivo, tipo){
-		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/cerrarEliminar/"+idUsuario+"/"+motivo+"/"+tipo);
+	restFactory.cerrarEliminar = function(rutU, motivo, op){
+		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/cerrarEliminar/"+rutU+"/"+motivo+"/"+op);
 	};
 
 	restFactory.tipoUsuarios = function(){

@@ -1,0 +1,54 @@
+<md-content class="md-whiteframe-z3" flex id="content">
+  <div layout = "row" layout-align="center center">
+                      <div flex-offset = "10" layout = "column">
+                      <br>
+                        <h3>Información Básica</h3>
+                        <br>
+                          <div>
+                            <md-input-container>
+                              <label>E-mail</label>
+                              <input type="email" name = "email" ng-model="userSelected.emailU" disabled>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Rut</label>
+                              <input type="text" name = "rut" ng-model="userSelected.rutU" disabled>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Nombre</label>
+                              <input type="text" name = "nombre" ng-model="userSelected.nombreU" disabled>
+                            </md-input-container>
+                          </div>
+                           <div>
+                            <md-input-container>
+                              <label>Apodo</label>
+                              <input type="text" name = "apodo" ng-model="userSelected.apodoU" disabled>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Tipo de usuario</label>
+                              <input type="text" name = "tu" ng-model="userSelected.tipoUsuarioidTipoUsuario.nombreTU" disabled>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Estado</label>
+                              <input type="text" name = "e" ng-model="userSelected.estadoidEstado.nombreE" disabled>
+                            </md-input-container>
+                          </div>
+                          <div layout = "column" layout-align="center center">
+                            <md-button class="md-raised md-primary" ng-disabled = "userSelected.estadoidEstado.nombreE == 'Cerrada' || userSelected.estadoidEstado.nombreE == 'Eliminada'" ng-click="editP()">Editar</md-button>
+                            <md-button ng-click= "back()">Atrás</md-button>
+                          </div>
+                      </div>
+                      <div>
+                        <div layout = "column">
+                          <img ng-src="{{userSelected.fotoPerfilU}}" class="img-thumbnail" alt="Cinque Terre" width="300" height="300"> 
+                        </div>
+                      </div>
+  </div>
+</md-content>

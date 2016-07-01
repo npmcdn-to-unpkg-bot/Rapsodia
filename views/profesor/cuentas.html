@@ -1,0 +1,103 @@
+
+
+<md-content flex class="md-whiteframe-z3">
+        <div layout = "column" layout-align="center center">
+          <br>
+          <h3>Cuentas de usuario</h3>
+        </div>
+
+        <div  layout="row" layout-align="center">
+          <div flex-gt-md="60" flex-md="80" flex-xs="100">
+              <div grid-data id='test' grid-options="gridOptions" grid-actions="gridActions">
+                  <!-- paginación -->
+                  <div layout-gt-sm="row" layout-sm="column" layout-align="center">
+                      <!-- Total de items -->
+                      <div flex-gt-sm="25" flex-sm="100" layout="row" layout-align="start center">
+                          <span>{{filtered.length}} Total de usuarios</span>
+                      </div>
+                      <!-- Total de items -->
+                      <!-- Paginación y cantidad de items por vista-->
+                      <div flex-gt-sm="75" flex-xs="100">
+                          <div layout-xs="column" layout="row" layout-align-xs="end end" layout-align="end center">
+                              <grid-pagination max-size="20"
+                                               boundary-links="true"
+                                               class="pagination mdl-shadow--2dp"
+                                               
+                                               total-items="paginationOptions.totalItems"
+                                               ng-model="paginationOptions.currentPage"
+                                               ng-change="reloadGrid()"
+                                               items-per-page="paginationOptions.itemsPerPage">
+                              </grid-pagination>
+                              <md-input-container flex-offset-gt-xs="5" class="items-per-page">
+                                  <md-select  ng-init="paginationOptions.itemsPerPage = '5'" ng-model="paginationOptions.itemsPerPage" ng-change="reloadGrid()"  aria-label="More">
+                                      <md-option>5</md-option>
+                                      <md-option>10</md-option>
+                                      <md-option>25</md-option>
+                                  </md-select>
+                              </md-input-container>
+                          </div>
+                      </div>
+                      <!-- Paginación y cantidad de items por vista-->
+                  </div>
+                  <!-- paginación -->
+                  <!-- tabla -->
+                  <div>
+                      <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                          <thead>
+                          <!-- Cabeceras -->
+                          <tr>
+                              <th>
+                                  <span>Email</span>
+                              </th>
+                              <th>
+                                  <span>Nombre</span>
+                              </th>
+                              <th>
+                                  <span>Rut</span>
+                              </th>
+                              <th>
+                                  <span>Tipo de usuario</span>
+                              </th>
+                              <th>
+                                  <span>Estado</span>
+                              </th>
+                          </tr>
+                          <!-- Cabeceras -->
+                          </thead>
+                          <tbody>
+                          <tr grid-item ng-click="sendEdicion(item.emailU)">
+                              <!-- Acceso a los elementos -->
+                                <td ng-bind="item.emailU"></td>
+                                <td ng-bind="item.nombreU"></td>
+                                <td ng-bind="item.rutU"></td>
+                                <td ng-bind="item.tipoUsuarioidTipoUsuario.nombreTU"></td>
+                                <td ng-bind="item.estadoidEstado.nombreE"></td>
+                               <!-- Acceso a los elementos -->
+                          </tr>
+                          </tbody>
+                      </table>
+                  </div>
+                  <!-- tabla -->
+                  <!-- Paginacion-->
+                  <div layout-xs="column" layout="row" layout-align-xs="end end" layout-align="end center">
+                      <grid-pagination max-size="20"
+                                       boundary-links="true"
+                                       class="pagination"
+                                       ng-if="paginationOptions.totalItems  > paginationOptions.itemsPerPage"
+                                       total-items="paginationOptions.totalItems"
+                                       ng-model="paginationOptions.currentPage"
+                                       ng-change="reloadGrid()"
+                                       items-per-page="paginationOptions.itemsPerPage"></grid-pagination>
+                      <md-input-container flex-offset-gt-xs="5" class="items-per-page">
+                          <md-select ng-init="paginationOptions.itemsPerPage = '5'" ng-model="paginationOptions.itemsPerPage" ng-change="reloadGrid()"  aria-label="More">
+                              <md-option>5</md-option>
+                              <md-option>10</md-option>
+                              <md-option>25</md-option>
+                          </md-select>
+                      </md-input-container>
+                  </div>
+                  <!-- Paginacion-->
+              </div>
+          </div>
+        </div>
+</md-content>

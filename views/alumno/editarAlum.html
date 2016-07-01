@@ -1,0 +1,116 @@
+<md-content class="md-whiteframe-z3" flex id="content">
+
+                <div layout = "column">
+                <!-- Editar de la columna-->
+                <div>
+                    <form name="editar">
+                    <div flex-offset = "15" layout = "row" layout-align = "center center">
+                      <!-- Primer elemento de la row-->
+                      <div layout = "column" >
+                      <br>
+                        <h3>Editar Perfil</h3>
+                        <br>
+                          <div>
+                            <md-input-container>
+                              <label>E-mail</label>
+                              <input type="email" name = "email" ng-required = "true" ng-model="usuario.emailU" disabled>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Rut</label>
+                              <input type="text" name = "rut" ng-required = "true" ng-model="usuario.rutU" disabled>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Nombre</label>
+                              <input type="text" name = "nombre" ng-required = "true" ng-model="usuario.nombreU" disabled>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Apodo</label>
+                              <input type="text" name = "apodo" ng-required = "true" ng-model="apodo">
+                              <div ng-messages="editar.apodo.$error">
+                                <div ng-message="required">Apodo requerido!</div>
+                              </div>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Contraseña</label>
+                              <input type="password" name = "pass" ng-model="pass">
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Confirmar Contraseña</label>
+                              <input type="password" name = "passC" ng-model="passC">
+                            </md-input-container>
+                          </div>
+                          <div hide->
+                            <md-input-container>
+                                    <label for="picture">Fotografía de perfil</label>
+                                    <input ngf-select ng-model="file" name="file" ngf-pattern="'.jpg'"
+                                      ngf-accept="'.jpg'" ngf-min-height="330" ngf-max-height = "1000" ngf-min-width = "330" ngf-max-width="1000"
+                                      ngf-resize="{width: 240, height: 240}" id = "input-file-id">
+                                    
+                                    <div ng-messages="editar.file.$error">
+                                        <div ng-message="minHeight">
+                                            Altura mínima 330px.
+                                        </div>
+                                        <div ng-message="maxHeight">
+                                            Altura máxima 1000px.
+                                        </div>
+                                        <div ng-message="minWidth">
+                                            Ancho mínimo 330px.
+                                        </div>
+                                        <div ng-message="maxWidth">
+                                            Ancho máximo 1000px.
+                                        </div>
+                                        <div ng-message="pattern">
+                                            Formato requerido JPG.
+                                        </div>
+                                    </div>
+                                </md-input-container>
+                          </div>
+                          <div layout = "column" layout-align = "center center">
+                            <md-button class="md-raised md-primary" ng-disabled = "editar.apodo.$invalid" ng-click="editarP()">Actualizar</md-button>
+                            <md-button ng-click= "cancelar()">Cancelar</md-button>
+                          </div>
+                      </div>
+                      <!-- Segundo elemento de la row -->
+                      <div >
+                        <img ng-src="{{usuario.fotoPerfilU}}" class="img-thumbnail" alt="Cinque Terre" width="240" height="240"> 
+                      </div>
+
+                      </div>
+                    </form>
+                  </div>
+
+                  <!-- Cerrar cuenta -->
+                  <div>
+                    <form name="cierre">
+                      <div layout = "column" layout-align="center center">
+                      <br>
+                        <h3>Cerrar Cuenta</h3>
+                        <br>
+                          <div>
+                            <md-input-container>
+                              <label>Motivo Cierre</label>
+                              <input type="text" name = "m" ng-required = "true" ng-model="motivoC" required = "true">
+                              <div ng-messages="cierre.m.$error">
+                                <div ng-message="required">Motivo requerido!</div>
+                              </div>
+                            </md-input-container>
+                          </div>
+                          <div layout = "column" layout-align="center center">
+                            <md-button class="md-raised md-primary" ng-disabled = "motivoC == null " ng-click="cerrarC()">Cerrar Cuenta</md-button>
+                            <md-button ng-click= "cancelar()">Cancelar</md-button>
+                          </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+</md-content>

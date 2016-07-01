@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app = "mainApp">
+<html lang="en" >
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,14 +8,160 @@
     <title>Rapsodia</title>
 
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
+     <link href="css/angular-material.css" rel="stylesheet">
+     <link href="css/bootstrap.min.css" rel="stylesheet">
+     <link href="css/hd.css" rel="stylesheet">
+     <link rel="stylesheet" href="css/material-indigo-blue.css">
   </head>
-  <body>
-    
-    <div ng-view>	
-    </div>
+  <body layout = "column" ng-app = "mainApp" ng-cloak>
+  <div layout = "row" flex>
+      <!-- sideNav -->
+        <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+          <div ng-controller = "snCtrl">
+            <!-- Cabecera-->
+            <md-toolbar class="md-tall md-hue-2" layout-align = "center center">
+              <!-- Cabecera login -->
+              <div ng-if = "auth.isLoggedIn() == false" >
+                <h1 class="md-toolbar-tools">Bienvenido</h1>
+              </div>
+              <!-- Cabecera usuarios logeados-->
+              <div ng-if = "auth.isLoggedIn() == true" class="md-toolbar-tools" layout >
+                  <md-icon hide-xs md-svg-icon="img/icon/ic_account_circle_white_48px.svg"></md-icon>
+                      <div layout="column" layout-padding>
+                          <span class="md-body-2">{{sesion.getUser().apodoU}}</span>
+                          <span class="md-caption">{{sesion.getUser().emailU}}</span>
+                      </div>
+                  <span flex></span>                    
+              </div>
+            </md-toolbar>
 
+            <md-content layout-padding>
+              <!-- Usuario no logeado -->
+              <div  ng-if = "auth.isLoggedIn() == false">
+                <p>
+                  Rapsodia es una plataforma para el aprendizaje y aplicación de los conceptos de las pruebas de software.
+                </p>
+              </div>
+              <!-- Alumno / Ayudante-->
+              <div ng-if = "sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Alumno' || sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Ayudante'">
+                  <md-list>
+                    <md-list-item ng-click = "perfilAA()">
+                        <span>VER PERFIL</span>
+                        <span flex></span>
+                    </md-list-item>
+                  </md-list>
+              </div>
+              <!-- Profesor -->
+              <div ng-if = "sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Profesor'">
+                  <md-list>
+                    <md-list-item ng-click = "perfilP()">
+                        <span>VER PERFIL</span>
+                        <span flex></span>
+                    </md-list-item>
+                    <md-list-item ng-click = "crear()">
+                        <span>CREAR USUARIO</span>
+                        <span flex></span>
+                    </md-list-item>
+                    <md-list-item ng-click = "ver()">
+                        <span>CUENTAS DE USUARIO</span>
+                        <span flex></span>
+                    </md-list-item>
+                  </md-list>
+              </div>                     
+            </md-content>
+          </div>
+        </md-sidenav>
+      
+      <!-- sideNav -->     
+      <!-- Contenido -->
+      <div flex layout = "column" layout-fill>
+        <!-- ToolBar-->
+        <div>
+           <md-toolbar class="md-whiteframe-z1">
+
+            <div ng-controller = "tbCtrl" >
+               <!-- Toolbar Alumno / Ayudante -->
+               <div class="md-toolbar-tools" ng-if = "auth.isLoggedIn() == true && (sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Alumno' || sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Ayudante')">
+                  <md-button id="main" class="menu" hide-gt-md ng-click="toggleLeft()" aria-label="Show User List">
+                    <md-icon md-svg-icon="img/icon/ic_menu_white_18px.svg"></md-icon>
+                  </md-button>
+                  <a href="#/home/alumno"><span>Rapsodia</span></a>
+                  <span flex ></span>
+                      <!-- Menu -->
+                      <md-menu-bar >
+                        <md-menu >
+                          <div ng-click="$mdOpenMenu()">
+                            <button class="md-icon-button" aria-label="More">
+                              <md-icon md-svg-icon="img/icon/ic_more_vert_white_18px.svg"></md-icon>
+                            </button>
+                          </div>
+                          <md-menu-content>
+                          <md-menu-item>
+                              <md-button ng-click="editP()">
+                                Editar Perfil
+                              </md-button>
+                            </md-menu-item>
+                            <md-menu-divider></md-menu-divider>  
+                            <md-menu-item>
+                              <md-button ng-click="close()">
+                                Cerrar Sesión
+                              </md-button>
+                            </md-menu-item>                      
+                        </md-menu>
+                      </md-menu-bar>
+                      <!-- Menu -->
+               </div>
+              <!--Toolbar profesor -->
+               <div class="md-toolbar-tools" ng-if = "auth.isLoggedIn() == true && sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Profesor'">
+                  <md-button id="main" class="menu" hide-gt-md ng-click="toggleLeft()" aria-label="Show User List">
+                    <md-icon md-svg-icon="img/icon/ic_menu_white_18px.svg"></md-icon>
+                  </md-button>
+                  <h2>
+                    <a href="#/home/profesor"><span>Rapsodia</span></a>
+                  </h2>
+                  <span flex></span>
+                  <md-button class="md-icon-button" aria-label="More" ng-if = "isSearch">
+                        <md-icon md-svg-icon="img/icon/ic_search_white_18px.svg"></md-icon>
+                  </md-button>
+                    <!-- Menu -->
+                    <md-menu-bar>
+                      <md-menu >
+                        <div ng-click="$mdOpenMenu()">
+                          <button class="md-icon-button" aria-label="More">
+                            <md-icon md-svg-icon="img/icon/ic_more_vert_white_18px.svg"></md-icon>
+                          </button>
+                        </div>
+                        <md-menu-content>
+                        <md-menu-item>
+                            <md-button ng-click="editProfe()">
+                              Editar Perfil
+                            </md-button>
+                          </md-menu-item>
+                          <md-menu-divider></md-menu-divider>  
+                          <md-menu-item>
+                            <md-button ng-click="close()">
+                              Cerrar Sesión
+                            </md-button>
+                          </md-menu-item>                      
+                      </md-menu>
+                    </md-menu-bar>
+                    <!-- Menu -->
+               </div>
+              <!-- Toolbar Inicio -->
+              <div class="md-toolbar-tools" ng-if = "auth.isLoggedIn() == false">
+                  <a href="#/home/alumno"><span>Rapsodia</span></a>
+                  <span flex></span>
+              </div>
+            </div>
+          </md-toolbar>
+        </div>
+        <!-- Contenido -->
+        <div flex layout = "column" layout-padding md-scroll-y ng-view>
+        </div>
+      </div>
+      
+  </div>
+    
     <script src = "js/angular/angular.js"></script>
     <script src = "js/angular/angular-route.js"></script>
     <script src = "js/angular/angular-cookies.js"></script>
@@ -24,17 +170,16 @@
     <script src = "js/angular/angular-messages.min.js"></script>
     <script src = "js/angular-material.js"></script>
     <script src="js/jquery.js"></script>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <!-- <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.js"></script> -->
-    <!-- <script src="https://code.angularjs.org/1.4.0-beta.5/angular-route.min.js"></script> -->
-    <!-- <script src = "https://code.angularjs.org/1.5.5/angular-cookies.js"></script> -->
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
     <script src = "js/controller.js"></script>
     <script src = "js/factories.js"></script>
     <script src = "js/app.js"></script>
     <script src = "js/directive.js" ></script>
+    <script src = "js/rutDirective.js" ></script>
     <script src = "js/service.js"></script>
-    
+    <script src = "js/pagination.js"></script>
+    <script src = "js/dataGrid.js"></script>
+    <script src = "js/ng-file-upload/dist/ng-file-upload-shim.min.js"></script>
+    <script src = "js/ng-file-upload/dist/ng-file-upload.min.js"></script>
   </body>
 </html>

@@ -1,0 +1,15 @@
+<div layout="row" flex="20">
+    <input id="fileInput" type="file" class="ng-hide">
+    <md-input-container flex class="md-block">
+      <input type="text" ng-model="fileName" disabled>
+      <div class="hint">Select your file</div>
+    </md-input-container>
+    <div>
+       <input class="ng-hide" id="input-file-id" ngf-select ng-model="file" name="file" ngf-pattern="'.jpg'"
+                                      ngf-accept="'.jpg'" ngf-min-height="330" ngf-max-height = "1000" ngf-min-width = "330" ngf-max-width="1000"
+                                      ngf-resize="{width: 240, height: 240}" id = "input-file-id" />
+           <label for="input-file-id" class="md-button md-raised md-primary">Examinar</label>
+      </div>
+
+    </div>
+  </dive>     

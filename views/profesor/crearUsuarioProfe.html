@@ -1,0 +1,103 @@
+<md-content  class="md-whiteframe-z3" flex >
+                <div layout = "column" layout-align="center center">
+                    <form name="crear">
+                      <div layout = "column">
+                      <br>
+                        <h3>Crear usuario</h3>
+                        <br>
+                          <div>
+                            <md-input-container>
+                              <label>E-mail</label>
+                              <input type="email" name = "email" ng-required = "true" ng-pattern="/^.+@.+\..+$/" ng-model="newUsuario.emailU">
+                              <div ng-messages="crear.email.$error">
+                                <div ng-message="required">Email requerido!</div>
+                                <div ng-message="pattern">Inválido!, Ej: sac@udeas.cl</div>
+                              </div>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Rut</label>
+                              <input type="text" name = "rut" ng-required = "true" ng-directive ng-model="newUsuario.rutU">
+                              <div ng-messages="crear.rut.$error">
+                                <div ng-message="required">Rut requerido!</div>
+                              </div>
+                              <span ng-show="crear.rut.$invalid && crear.rut.$dirty && crear.rut.$touched" class="md-input-message-animation ng-scope" style = "opacity: 1; margin-top: 0px;">Inválido!, Ej:18486956-k</span>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Nombre</label>
+                              <input type="text" name = "nombre" ng-required = "true" ng-model="newUsuario.nombreU">
+                              <div ng-messages="crear.nombre.$error">
+                                <div ng-message="required">Nombre requerido!</div>
+                              </div>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Apodo</label>
+                              <input type="text" name = "apodo" ng-required = "true" ng-model="newUsuario.apodoU">
+                              <div ng-messages="crear.apodo.$error">
+                                <div ng-message="required">Apodo requerido!</div>
+                              </div>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Contraseña</label>
+                              <input type="password" name = "pass" ng-required = "true" ng-model="newUsuario.contrasenaU">
+                              <div ng-messages="crear.pass.$error">
+                                <div ng-message="required">Contraseña requerida!</div>
+                              </div>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Confirmar Contraseña</label>
+                              <input type="password" name = "passC" ng-required = "true" ng-model="passC">
+                              <div ng-messages="crear.passC.$error">
+                                <div ng-message="required">Confirmación requerida!</div>
+                              </div>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Pregunta Secreta</label>
+                              <input type="text" name = "ps" ng-required = "true" ng-model="newUsuario.preguntaU">
+                              <div ng-messages="crear.ps.$error">
+                                <div ng-message="required">Pregunta secreta requerida!</div>
+                              </div>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Respuesta</label>
+                              <input type="password" name = "res" ng-required = "true" ng-model="newUsuario.respuestaU">
+                              <div ng-messages="crear.res.$error">
+                                <div ng-message="required">Respuesta requerida!</div>
+                              </div>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Rol</label>
+                              <md-select ng-model="tipoSelected">
+                                <md-option ng-value = "tipo" ng-repeat="tipo in tiposUsuario">
+                                  {{tipo.nombreTU}}
+                                </md-option>
+                              </md-select>
+                            </md-input-container>
+                          </div>
+                      </div>
+                      <br>
+                      <div layout = "column" layout-align="center center">
+
+                        <md-button class="md-raised md-primary" ng-disabled = "crear.email.$invalid || crear.rut.$invalid || crear.nombre.$invalid || crear.apodo.$invalid || crear.pass.$invalid || crear.passC.$invalid || crear.ps.$invalid || crear.res.$invalid" ng-click="crearU()">Crear Usuario</md-button>
+
+                        <md-button ng-click= "cancelar()">Cancelar</md-button>
+
+                      </div>
+                    </form>
+                  </div>
+</md-content>
