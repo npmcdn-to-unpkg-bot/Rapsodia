@@ -96,7 +96,7 @@ app.config(function($routeProvider){
 		controller: "homeCtrlProfe"
 		
 	})
-	.when("/home/profesor/info", {
+	.when("/home/profesor/perfil", {
 		resolve: {
 			"check": function($location,$rootScope){
 				if( !$rootScope.auth.isLoggedIn()){
@@ -113,7 +113,7 @@ app.config(function($routeProvider){
 		controller: "homeCtrlProfe"
 
 	})
-	.when("/home/profesor/editar", {
+	.when("/home/profesor/editarP", {
 		resolve: {
 			"check": function($location,$rootScope){
 				if( !$rootScope.auth.isLoggedIn()){
@@ -165,7 +165,7 @@ app.config(function($routeProvider){
 		controller: "cuentasCtrlProfe"
 
 	})
-	.when("/home/profesor/info/:emailU", {
+	.when("/home/profesor/info", {
 
 		resolve: {
 			"check": function($location,$rootScope){
@@ -183,7 +183,7 @@ app.config(function($routeProvider){
 		controller: "infoCtrlProfe"
 
 	})
-	.when("/home/profesor/editar/:emailU", {
+	.when("/home/profesor/editar", {
 		resolve: {
 			"check": function($location,$rootScope){
 				if( !$rootScope.auth.isLoggedIn()){
@@ -196,8 +196,8 @@ app.config(function($routeProvider){
 			}	
 		},
 
-		templateUrl: "views/profesor/editarP.html",
-		controller: "editarPCtrl"
+		templateUrl: "views/profesor/editSelect.html",
+		controller: "editarSelected"
 
 	})
 	.otherwise({

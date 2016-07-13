@@ -18,9 +18,14 @@ app.service('fileUpload', ['$http', function ($http) {
 app.service('sesion',['$window',function($window) {
 
     this.user = JSON.parse($window.localStorage.getItem('sesion.user'));
-           
+    this.userToEdit  = JSON.parse($window.localStorage.getItem('sesion.userToEdit'));     
+
     this.getUser = function(){
         return this.user;
+    };
+
+    this.getUserToEdit = function(){
+        return this.userToEdit;
     };
 
     this.setUser = function(user){
@@ -29,8 +34,18 @@ app.service('sesion',['$window',function($window) {
         return this;
     };
 
+     this.setUserToEdit = function(user1){
+        this.userToEdit = user1;
+        $window.localStorage.setItem('sesion.userToEdit', JSON.stringify(user1));
+        return this;
+    };
+
     this.destroy = function destroy(){
         this.setUser(null);
+    };
+
+    this.destroyUserToEdit = function destroy(){
+        this.setUserToEdit(null);
     };
  }]);
 
@@ -44,6 +59,14 @@ app.service('auth',['$http', 'sesion', '$location',
     this.isProfesor = function isProfesor(){
         return sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == "Profesor";
     };
+
+    this.isAdmin = function isAdmin(){
+        return sesion.getUser().rutU == "18486956-k";
+    }
+
+     this.isAdminE = function isAdminE(){
+        return sesion.getUserToEdit().rutU == "18486956-k";
+    }
 
     this.isAlumnoAyudante = function isAlumnoAyudante(){
         return  sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == "Alumno" ||  sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == "Ayudante";

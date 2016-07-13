@@ -35,8 +35,8 @@ app.factory("restFactory", ["$http", function($http){
 
 	var restFactory = {};
 
-	restFactory.login = function(datos){
-		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/login", datos);
+	restFactory.login = function(email, pass){
+		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/login/"+email+"/"+pass);
 	};
 
 	restFactory.getUserByEmail = function(email){

@@ -41,7 +41,7 @@
                             </md-input-container>
                           </div>
                           <div layout = "column" layout-align="center center">
-                            <md-button class="md-raised md-primary" ng-disabled = "userSelected.estadoidEstado.nombreE == 'Cerrada' || userSelected.estadoidEstado.nombreE == 'Eliminada'" ng-click="editP()">Editar</md-button>
+                            <md-button class="md-raised md-primary" ng-disabled = "userSelected.estadoidEstado.nombreE == 'Cerrada' || userSelected.estadoidEstado.nombreE == 'Eliminada' || (userSelected.rutU == '18486956-k' && !auth.isAdmin())" ng-click="editP()">Editar</md-button>
                             <md-button ng-click= "back()">Atrás</md-button>
                           </div>
                       </div>

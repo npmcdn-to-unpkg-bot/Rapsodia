@@ -55,7 +55,7 @@
                                     <label for="picture">Fotografía de perfil</label>
                                     <input ngf-select ng-model="file" name="file" ngf-pattern="'.jpg'"
                                       ngf-accept="'.jpg'" ngf-min-height="330" ngf-max-height = "1000" ngf-min-width = "330" ngf-max-width="1000"
-                                      ngf-resize="{width: 240, height: 240}" id = "input-file-id">
+                                      ngf-resize="{width: 330, height: 330}" id = "input-file-id">
                                     
                                     <div ng-messages="editar.file.$error">
                                         <div ng-message="minHeight">
@@ -91,7 +91,7 @@
                   </div>
 
                   <!-- Cerrar cuenta -->
-                  <div >
+                  <div>
                     <form name="cierre">
                       <div layout = "column" layout-align="center center">
                       <br><div>
@@ -114,6 +114,32 @@
                       </div>
                     </form>
                   </div>
+
+                    <!-- Eliminar cuenta -->
+                  <div>
+                    <form name="delete">
+                      <div layout = "column" layout-align="center center">
+                      <br>
+                        <h3>Eliminar Cuenta</h3>
+                        <br>
+                          <div>
+                            <md-input-container>
+                              <label>Motivo Eliminación</label>
+                              <input type="text" name = "me" ng-required = "true" ng-model="motivoE" required = "true">
+                              <div ng-messages="delete.me.$error">
+                                <div ng-message="required">Motivo requerido!</div>
+                              </div>
+                            </md-input-container>
+                          </div>
+                          <div layout = "column" layout-align="center center">
+                            <md-button class="md-raised md-primary" ng-disabled = "motivoE == null " ng-click="eliminarC()">Eliminar Cuenta</md-button>
+                            <md-button ng-click= "cancelar()">Cancelar</md-button>
+                          </div>
+                      </div>
+                    </form>
+                  </div>
+
+
                 </div>
 </md-content>
 
