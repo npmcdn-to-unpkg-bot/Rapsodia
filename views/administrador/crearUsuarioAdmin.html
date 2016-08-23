@@ -1,4 +1,17 @@
 <md-content  class="md-whiteframe-z3" flex >
+ <div layout = "row">
+  <div>
+   <md-button id="main" class="md-icon-button"  aria-label="Show User List" ng-click = "back()">
+    <md-icon md-svg-icon="img/icon/ic_arrow_back_black_48px.svg" ></md-icon>
+   </md-button>
+  </div>
+  <div>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#/home/administrador">Inicio</a></li>
+      <li class="breadcrumb-item active">Crear Usuario</li>
+    </ol>
+  </div>
+</div>
                 <div layout = "column" layout-align="center center">
                     <form name="crear">
                       <div layout = "column">
@@ -31,6 +44,15 @@
                               <input type="text" name = "nombre" ng-required = "true" ng-model="newUsuario.nombreU">
                               <div ng-messages="crear.nombre.$error">
                                 <div ng-message="required">Nombre requerido!</div>
+                              </div>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Apellido</label>
+                              <input type="text" name = "apellido" ng-required = "true" ng-model="newUsuario.apellidoU">
+                              <div ng-messages="crear.apellido.$error">
+                                <div ng-message="required">Apellido requerido!</div>
                               </div>
                             </md-input-container>
                           </div>
@@ -93,9 +115,9 @@
                       <br>
                       <div layout = "column" layout-align="center center">
 
-                        <md-button class="md-raised md-primary" ng-disabled = "crear.email.$invalid || crear.rut.$invalid || crear.nombre.$invalid || crear.apodo.$invalid || crear.pass.$invalid || crear.passC.$invalid || crear.ps.$invalid || crear.res.$invalid" ng-click="crearU()">Crear Usuario</md-button>
+                        <md-button class="md-raised md-primary" ng-disabled = "crear.email.$invalid || crear.rut.$invalid || crear.nombre.$invalid || crear.apellido.$invalid || crear.apodo.$invalid || crear.pass.$invalid || crear.passC.$invalid || crear.ps.$invalid || crear.res.$invalid" ng-click="crearU()">Crear Usuario</md-button>
 
-                        <md-button ng-click= "cancelar()">Cancelar</md-button>
+                        <md-button ng-click= "back()">Cancelar</md-button>
 
                       </div>
                     </form>

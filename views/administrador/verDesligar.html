@@ -1,4 +1,4 @@
- <md-content class="md-whiteframe-z3" flex id="content">
+<md-content class="md-whiteframe-z3" flex id="content">
  <div layout = "row">
   <div>
    <md-button id="main" class="md-icon-button"  aria-label="Show User List" ng-click = "back()">
@@ -7,12 +7,13 @@
   </div>
   <div>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="#/home/profesor">Inicio</a></li>
-      <li class="breadcrumb-item active">Perfil Usuario</li>
+      <li class="breadcrumb-item"><a href="#/home/administrador">Inicio</a></li>
+      <li class="breadcrumb-item"><a href="#/home/administrador/cuentasP">Cuentas Profesores</a></li>
+       <li class="breadcrumb-item"><a href="#/home/administrador/verAsociadosP">Cuentas Asociados</a></li>
+      <li class="breadcrumb-item active">Cuenta Asociado</li>
     </ol>
   </div>
 </div>
-
   <div layout = "row" layout-align="center center">
                       <div flex-offset = "10" layout = "column">
                       <br>
@@ -58,7 +59,7 @@
                             </md-input-container>
                           </div>
                           <div layout = "column" layout-align="center center">
-                            <md-button class="md-raised md-primary" ng-click="editP()">Editar</md-button>
+                            <md-button class="md-raised md-primary" ng-click="desligarC()">Desligar</md-button>
                           </div>
                       </div>
                       <div>

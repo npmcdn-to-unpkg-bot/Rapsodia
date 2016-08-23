@@ -80,6 +80,70 @@ app.config(function($routeProvider){
 		controller: "editarAlumCtrl"
 		
 	})
+	.when("/home/alumno/activar", {
+		resolve: {
+			"check": function($location,$rootScope){
+				if( !$rootScope.auth.isLoggedIn()){
+					$location.path('/');
+				}else{
+					if($rootScope.auth.isProfesor()){
+						$location.path('/home/profesor');
+					}
+				}
+			}	
+		},
+		templateUrl: "views/alumno/activarAlum.html",
+		controller: "editarAlumCtrl"
+		
+	})
+	.when("/home/alumno/verAsociadosP", {
+		resolve: {
+			"check": function($location,$rootScope){
+				if( !$rootScope.auth.isLoggedIn()){
+					$location.path('/');
+				}else{
+					if($rootScope.auth.isProfesor()){
+						$location.path('/home/profesor');
+					}
+				}
+			}	
+		},
+		templateUrl: "views/alumno/verProfeAsociado.html",
+		controller: "cuentasPAlumCtrl"
+		
+	})
+	.when("/home/alumno/verAsociadosAA", {
+		resolve: {
+			"check": function($location,$rootScope){
+				if( !$rootScope.auth.isLoggedIn()){
+					$location.path('/');
+				}else{
+					if($rootScope.auth.isProfesor()){
+						$location.path('/home/profesor');
+					}
+				}
+			}	
+		},
+		templateUrl: "views/alumno/verAA.html",
+		controller: "cuentasAACtrl"
+		
+	})
+	.when("/home/alumno/verAA", {
+		resolve: {
+			"check": function($location,$rootScope){
+				if( !$rootScope.auth.isLoggedIn()){
+					$location.path('/');
+				}else{
+					if($rootScope.auth.isProfesor()){
+						$location.path('/home/profesor');
+					}
+				}
+			}	
+		},
+		templateUrl: "views/alumno/uSelected.html",
+		controller: "verAACtrl"
+		
+	})
 	.when("/home/profesor", {
 		resolve: {
 			"check": function($location,$rootScope){
@@ -130,23 +194,6 @@ app.config(function($routeProvider){
 		controller: "editarProfeCtrl"
 
 	})
-	.when("/home/profesor/crear", {
-		resolve: {
-			"check": function($location,$rootScope){
-				if( !$rootScope.auth.isLoggedIn()){
-					$location.path('/');
-				}else{
-					if($rootScope.auth.isAlumnoAyudante()){
-						$location.path('/home/alumno');
-					}
-				}
-			}	
-		},
-
-		templateUrl: "views/profesor/crearUsuarioProfe.html",
-		controller: "crearProfeCtrl"
-
-	})
 	.when("/home/profesor/ver", {
 
 		resolve: {
@@ -183,7 +230,19 @@ app.config(function($routeProvider){
 		controller: "infoCtrlProfe"
 
 	})
-	.when("/home/profesor/editar", {
+	.when("/home/profesor/activar", {
+		resolve: {
+			"check": function($location,$rootScope){
+				if( !$rootScope.auth.isLoggedIn()){
+					$location.path('/');
+				}
+			}	
+		},
+		templateUrl: "views/profesor/activarProfe.html",
+		controller: "editarProfeCtrl"
+		
+	})
+	.when("/home/administrador", {
 		resolve: {
 			"check": function($location,$rootScope){
 				if( !$rootScope.auth.isLoggedIn()){
@@ -191,14 +250,195 @@ app.config(function($routeProvider){
 				}else{
 					if($rootScope.auth.isAlumnoAyudante()){
 						$location.path('/home/alumno');
+					}else if($rootScope.auth.isProfesor()){
+						$location.path('/home/profesor');
+					}
+				}
+			}	
+		},
+		templateUrl: "views/administrador/homeAdmin.html",
+		controller: "homeCtrlAdmin"
+		
+	})
+	.when("/home/administrador/perfil", {
+		resolve: {
+			"check": function($location,$rootScope){
+				if( !$rootScope.auth.isLoggedIn()){
+					$location.path('/');
+				}else{
+					if($rootScope.auth.isAlumnoAyudante()){
+						$location.path('/home/alumno');
+					}else if($rootScope.auth.isProfesor()){
+						$location.path('/home/profesor');
 					}
 				}
 			}	
 		},
 
-		templateUrl: "views/profesor/editSelect.html",
-		controller: "editarSelected"
+		templateUrl: "views/administrador/infoAdmin.html",
+		controller: "homeCtrlAdmin"
 
+	})
+	.when("/home/administrador/editarA", {
+		resolve: {
+			"check": function($location,$rootScope){
+				if( !$rootScope.auth.isLoggedIn()){
+					$location.path('/');
+				}else{
+					if($rootScope.auth.isAlumnoAyudante()){
+						$location.path('/home/alumno');
+					}else if($rootScope.auth.isProfesor()){
+						$location.path('/home/profesor');
+					}
+				}
+			}	
+		},
+
+		templateUrl: "views/administrador/editarAdmin.html",
+		controller: "editarAdminCtrl"
+
+	})
+	.when("/home/administrador/crear", {
+		resolve: {
+			"check": function($location,$rootScope){
+				if( !$rootScope.auth.isLoggedIn()){
+					$location.path('/');
+				}else{
+					if($rootScope.auth.isAlumnoAyudante()){
+						$location.path('/home/alumno');
+					}else if($rootScope.auth.isProfesor()){
+						$location.path('/home/profesor');
+					}
+				}
+			}	
+		},
+
+		templateUrl: "views/administrador/crearUsuarioAdmin.html",
+		controller: "crearAdminCtrl"
+
+	})
+	.when("/home/administrador/ver", {
+
+		resolve: {
+			"check": function($location,$rootScope){
+				if( !$rootScope.auth.isLoggedIn()){
+					$location.path('/');
+				}else{
+					if($rootScope.auth.isAlumnoAyudante()){
+						$location.path('/home/alumno');
+					}else if($rootScope.auth.isProfesor()){
+						$location.path('/home/profesor');
+					}
+				}
+			}	
+		},
+
+		templateUrl: "views/administrador/cuentas.html",
+		controller: "cuentasCtrlAdmin"
+
+	})
+	.when("/home/administrador/info", {
+
+		resolve: {
+			"check": function($location,$rootScope){
+				if( !$rootScope.auth.isLoggedIn()){
+					$location.path('/');
+				}else{
+					if($rootScope.auth.isAlumnoAyudante()){
+						$location.path('/home/alumno');
+					}else if($rootScope.auth.isProfesor()){
+						$location.path('/home/profesor');
+					}
+				}
+			}	
+		},
+
+		templateUrl: "views/administrador/seleccionado.html",
+		controller: "infoCtrlAdmin"
+
+	})
+	.when("/home/administrador/editar", {
+		resolve: {
+			"check": function($location,$rootScope){
+				if( !$rootScope.auth.isLoggedIn()){
+					$location.path('/');
+				}else{
+					if($rootScope.auth.isAlumnoAyudante()){
+						$location.path('/home/alumno');
+					}else if($rootScope.auth.isProfesor()){
+						$location.path('/home/profesor');
+					}
+				}
+			}	
+		},
+
+		templateUrl: "views/administrador/editSelect.html",
+		controller: "editarSelectedAdmin"
+
+	})
+	.when("/home/administrador/activar", {
+		resolve: {
+			"check": function($location,$rootScope){
+				if( !$rootScope.auth.isLoggedIn()){
+					$location.path('/');
+				}else{
+					if($rootScope.auth.isProfesor()){
+						$location.path('/home/profesor');
+					}
+				}
+			}	
+		},
+		templateUrl: "views/administrador/activarAdmin.html",
+		controller: "editarAdminCtrl"
+		
+	})
+	.when("/home/administrador/cuentasP", {
+		resolve: {
+			"check": function($location,$rootScope){
+				if( !$rootScope.auth.isLoggedIn()){
+					$location.path('/');
+				}else{
+					if($rootScope.auth.isProfesor()){
+						$location.path('/home/profesor');
+					}
+				}
+			}	
+		},
+		templateUrl: "views/administrador/cuentasPAdmin.html",
+		controller: "cuentasPAdminCtrl"
+		
+	})
+	.when("/home/administrador/verAsociadosP", {
+		resolve: {
+			"check": function($location,$rootScope){
+				if( !$rootScope.auth.isLoggedIn()){
+					$location.path('/');
+				}else{
+					if($rootScope.auth.isProfesor()){
+						$location.path('/home/profesor');
+					}
+				}
+			}	
+		},
+		templateUrl: "views/administrador/verAsociadosP.html",
+		controller: "asociadosPAdminCtrl"
+		
+	})
+	.when("/home/administrador/verDesligar", {
+		resolve: {
+			"check": function($location,$rootScope){
+				if( !$rootScope.auth.isLoggedIn()){
+					$location.path('/');
+				}else{
+					if($rootScope.auth.isProfesor()){
+						$location.path('/home/profesor');
+					}
+				}
+			}	
+		},
+		templateUrl: "views/administrador/verDesligar.html",
+		controller: "desligarAdminCtrl"
+		
 	})
 	.otherwise({
 		redirectTo: "/"

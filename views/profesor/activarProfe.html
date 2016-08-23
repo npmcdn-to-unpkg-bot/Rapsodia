@@ -1,18 +1,4 @@
- <md-content class="md-whiteframe-z3" flex id="content">
- <div layout = "row">
-  <div>
-   <md-button id="main" class="md-icon-button"  aria-label="Show User List" ng-click = "back()">
-    <md-icon md-svg-icon="img/icon/ic_arrow_back_black_48px.svg" ></md-icon>
-   </md-button>
-  </div>
-  <div>
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="#/home/profesor">Inicio</a></li>
-      <li class="breadcrumb-item active">Perfil Usuario</li>
-    </ol>
-  </div>
-</div>
-
+<md-content class="md-whiteframe-z3" flex id="content">
   <div layout = "row" layout-align="center center">
                       <div flex-offset = "10" layout = "column">
                       <br>
@@ -57,8 +43,14 @@
                               <input type="text" name = "apodo" ng-model="usuario.tipoUsuarioidTipoUsuario.nombreTU" disabled>
                             </md-input-container>
                           </div>
+                          <div>
+                            <md-input-container>
+                              <label>Estado del usuario</label>
+                              <input type="text" name = "apodo" ng-model="usuario.estadoidEstado.nombreE" disabled>
+                            </md-input-container>
+                          </div>
                           <div layout = "column" layout-align="center center">
-                            <md-button class="md-raised md-primary" ng-click="editP()">Editar</md-button>
+                            <md-button class="md-raised md-primary" ng-click="activarC()">Activar</md-button>
                           </div>
                       </div>
                       <div>

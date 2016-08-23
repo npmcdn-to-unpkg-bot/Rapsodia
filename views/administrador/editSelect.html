@@ -1,4 +1,4 @@
-<md-content class="md-whiteframe-z3" flex id="content">
+<md-content class="md-whiteframe-z3" flex >
  <div layout = "row">
   <div>
    <md-button id="main" class="md-icon-button"  aria-label="Show User List" ng-click = "back()">
@@ -7,18 +7,18 @@
   </div>
   <div>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="#/home/alumno">Inicio</a></li>
-       <li class="breadcrumb-item"><a href="#/home/alumno/info">Perfil Usuario</a></li>
-      <li class="breadcrumb-item active">Edición Perfil</li>
+      <li class="breadcrumb-item"><a href="#/home/administrador">Inicio</a></li>
+      <li class="breadcrumb-item"><a href="#/home/administrador/ver">Cuentas Usuarios</a></li>
+      <li class="breadcrumb-item"><a href="#/home/administrador/info">Cuenta Usuario</a></li>
+      <li class="breadcrumb-item active">Edición Usuario</li>
     </ol>
   </div>
 </div>
-                <div layout = "column">
+  <div layout = "column">
                 <!-- Editar de la columna-->
                 <div>
-                    <form name="editar">
-                    <div flex-offset = "15" layout = "row" layout-align = "center center">
-                      <!-- Primer elemento de la row-->
+                    <form name="edita">
+                    <div  flex-offset = "15" layout = "row" layout-align="center center">
                       <div layout = "column" >
                       <br>
                         <h3>Editar Perfil</h3>
@@ -26,32 +26,32 @@
                           <div>
                             <md-input-container>
                               <label>E-mail</label>
-                              <input type="email" name = "email" ng-required = "true" ng-model="usuario.emailU" disabled>
+                              <input type="email" name = "email" ng-required = "true" ng-model="userSelected.emailU" disabled>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Rut</label>
-                              <input type="text" name = "rut" ng-required = "true" ng-model="usuario.rutU" disabled>
+                              <input type="text" name = "rut" ng-required = "true" ng-model="userSelected.rutU" disabled>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Nombre</label>
-                              <input type="text" name = "nombre" ng-required = "true" ng-model="usuario.nombreU" disabled>
+                              <input type="text" name = "nombre" ng-required = "true" ng-model="userSelected.nombreU" disabled>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Apellido</label>
-                              <input type="text" name = "apellido" ng-required = "true" ng-model="usuario.apellidoU" disabled>
+                              <input type="text" name = "apellido" ng-required = "true" ng-model="userSelected.apellidoU" disabled>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Apodo</label>
                               <input type="text" name = "apodo" ng-required = "true" ng-model="apodo">
-                              <div ng-messages="editar.apodo.$error">
+                              <div ng-messages="edita"edita.apodo.$error">
                                 <div ng-message="required">Apodo requerido!</div>
                               </div>
                             </md-input-container>
@@ -68,48 +68,22 @@
                               <input type="password" name = "passC" ng-model="passC">
                             </md-input-container>
                           </div>
-                          <div hide->
-                            <md-input-container>
-                                    <label for="picture">Fotografía de perfil</label>
-                                    <input ngf-select ng-model="file" name="file" ngf-pattern="'.jpg'"
-                                      ngf-accept="'.jpg'" ngf-min-height="330" ngf-max-height = "1000" ngf-min-width = "330" ngf-max-width="1000"
-                                      ngf-resize="{width: 240, height: 240}" id = "input-file-id">
-                                    
-                                    <div ng-messages="editar.file.$error">
-                                        <div ng-message="minHeight">
-                                            Altura mínima 330px.
-                                        </div>
-                                        <div ng-message="maxHeight">
-                                            Altura máxima 1000px.
-                                        </div>
-                                        <div ng-message="minWidth">
-                                            Ancho mínimo 330px.
-                                        </div>
-                                        <div ng-message="maxWidth">
-                                            Ancho máximo 1000px.
-                                        </div>
-                                        <div ng-message="pattern">
-                                            Formato requerido JPG.
-                                        </div>
-                                    </div>
-                                </md-input-container>
-                          </div>
+                          <br>
                           <div layout = "column" layout-align = "center center">
-                            <md-button class="md-raised md-primary" ng-disabled = "editar.apodo.$invalid || editar.file.$invalid" ng-click="editarP()">Actualizar</md-button>
+                            <md-button class="md-raised md-primary" ng-disabled = "edita.apodo.$invalid" ng-click="editar()">Actualizar</md-button>
                             <md-button ng-click= "cancelar()">Cancelar</md-button>
                           </div>
                       </div>
-                      <!-- Segundo elemento de la row -->
                       <div >
-                        <img ng-src="{{usuario.fotoPerfilU}}" class="img-thumbnail" alt="Cinque Terre" width="240" height="240"> 
+                        <img ng-src="{{userSelected.fotoPerfilU}}" class="img-thumbnail" alt="Cinque Terre" width="240" height="240"> 
                       </div>
 
                       </div>
                     </form>
-                  </div>
-
-                  <!-- Cerrar cuenta -->
-                  <div>
+                </div>
+  
+                <!-- Cerrar cuenta -->
+                <div>
                     <form name="cierre">
                       <div layout = "column" layout-align="center center">
                       <br>
@@ -130,6 +104,21 @@
                           </div>
                       </div>
                     </form>
-                  </div>
                 </div>
+
+                <!-- Eliminar cuenta -->
+                <div>
+                    <form name="elim">
+                      <div layout = "column" layout-align="center center">
+                      <br>
+                        <h3>Eliminar Cuenta</h3>
+                        <br>
+                          <div layout = "column" layout-align="center center">
+                            <md-button class="md-raised md-primary"  ng-click="eliminarC()">Eliminar Cuenta</md-button>
+                            <md-button ng-click= "cancelar()">Cancelar</md-button>
+                          </div>
+                      </div>
+                    </form>
+                </div>
+  </div>
 </md-content>

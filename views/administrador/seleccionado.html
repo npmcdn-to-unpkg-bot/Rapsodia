@@ -1,4 +1,4 @@
- <md-content class="md-whiteframe-z3" flex id="content">
+<md-content class="md-whiteframe-z3" flex id="content">
  <div layout = "row">
   <div>
    <md-button id="main" class="md-icon-button"  aria-label="Show User List" ng-click = "back()">
@@ -7,64 +7,70 @@
   </div>
   <div>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="#/home/profesor">Inicio</a></li>
-      <li class="breadcrumb-item active">Perfil Usuario</li>
+      <li class="breadcrumb-item"><a href="#/home/administrador">Inicio</a></li>
+      <li class="breadcrumb-item"><a href="#/home/administrador/ver">Cuentas Usuarios</a></li>
+      <li class="breadcrumb-item active">Cuenta Usuario</li>
     </ol>
   </div>
 </div>
-
   <div layout = "row" layout-align="center center">
                       <div flex-offset = "10" layout = "column">
                       <br>
-                      <div>
                         <h3>Información Básica</h3>
-                      </div>
-                        <br>
                         <br>
                           <div>
                             <md-input-container>
                               <label>E-mail</label>
-                              <input type="email" name = "email" ng-model="usuario.emailU" disabled>
+                              <input type="email" name = "email" ng-model="userSelected.emailU" disabled>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Rut</label>
-                              <input type="text" name = "rut" ng-model="usuario.rutU" disabled>
+                              <input type="text" name = "rut" ng-model="userSelected.rutU" disabled>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Nombre</label>
-                              <input type="text" name = "nombre" ng-model="usuario.nombreU" disabled>
+                              <input type="text" name = "nombre" ng-model="userSelected.nombreU" disabled>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Apellido</label>
-                              <input type="text" name = "apellido" ng-model="usuario.apellidoU" disabled>
+                              <input type="text" name = "apellido" ng-model="userSelected.apellidoU" disabled>
                             </md-input-container>
                           </div>
                            <div>
                             <md-input-container>
                               <label>Apodo</label>
-                              <input type="text" name = "apodo" ng-model="usuario.apodoU" disabled>
+                              <input type="text" name = "apodo" ng-model="userSelected.apodoU" disabled>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Tipo de usuario</label>
-                              <input type="text" name = "apodo" ng-model="usuario.tipoUsuarioidTipoUsuario.nombreTU" disabled>
+                              <input type="text" name = "tu" ng-model="userSelected.tipoUsuarioidTipoUsuario.nombreTU" disabled>
                             </md-input-container>
                           </div>
-                          <div layout = "column" layout-align="center center">
+                          <div>
+                            <md-input-container>
+                              <label>Estado</label>
+                              <input type="text" name = "e" ng-model="userSelected.estadoidEstado.nombreE" disabled>
+                            </md-input-container>
+                          </div>
+                          <div ng-if = "userSelected.estadoidEstado.nombreE == 'Abierta'" layout = "column" layout-align="center center">
                             <md-button class="md-raised md-primary" ng-click="editP()">Editar</md-button>
                           </div>
+                          <div ng-if = "userSelected.estadoidEstado.nombreE == 'Cerrada'" layout = "column" layout-align="center center">
+                            <md-button class="md-raised md-primary" ng-click="activarC()">Activar</md-button>
+                          </div>
+
                       </div>
                       <div>
                         <div layout = "column">
-                        <br>
-                          <img ng-src="{{usuario.fotoPerfilU}}" class="img-thumbnail" alt="Cinque Terre" width="300" height="300"> 
+                          <img ng-src="{{userSelected.fotoPerfilU}}" class="img-thumbnail" alt="Cinque Terre" width="300" height="300"> 
                         </div>
                       </div>
   </div>

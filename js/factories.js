@@ -1,36 +1,3 @@
-app.factory("cookieFactory", ["$cookieStore", "$location", "$http", function($cookieStore, $location){
-
-	var cookieFactory = {};
-
-	cookieFactory.putUser = function(user){
-		$cookieStore.put("user", user);
-	};
-
-	cookieFactory.getUser = function(){
-		cookieFactory.user = $cookieStore.get("user");
-		return cookieFactory.user;
-	};
-
-	cookieFactory.removeUser = function(){
-		$cookieStore.remove("user");
-	};
-
-	cookieFactory.putEstadoSesion = function(estado){
-		$cookieStore.put("estadoS", estado);
-	}
-
-	cookieFactory.getEstadoSesion = function(){
-		cookieFactory.estadoSesion = $cookieStore.get("estadoS");
-		return cookieFactory.estadoSesion;
-	};
-
-	cookieFactory.removeEstadoSesion = function(){
-		$cookieStore.remove("estadoS");
-	};
-
-	return cookieFactory;
-}]);
-
 app.factory("restFactory", ["$http", function($http){
 
 	var restFactory = {};
@@ -44,15 +11,23 @@ app.factory("restFactory", ["$http", function($http){
 	};
 
 	restFactory.sendEmail = function(email, op){
-		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/sendEmail/"+email+"/"+op);
+		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/recuperar/"+email+"/"+op);
 	};
 
 	restFactory.editarUsuario = function(usuario){
 		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/editarUsuario", usuario);
 	};
 
-	restFactory.cerrarEliminar = function(rutU, motivo, op){
-		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/cerrarEliminar/"+rutU+"/"+motivo+"/"+op);
+	restFactory.activar = function(rutU){
+		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/activarC/"+rutU);
+	};
+
+	restFactory.cerrar = function(rutU, motivo){
+		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/cerrarC/"+rutU+"/"+motivo);
+	};
+
+	restFactory.eliminar = function(rutU){
+		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/eliminarC/"+rutU);
 	};
 
 	restFactory.tipoUsuarios = function(){
@@ -67,5 +42,29 @@ app.factory("restFactory", ["$http", function($http){
 		return $http.get("http://localhost:8080/RAPSO-web/webresources/usuario/getAllUsers");
 	};
 	
+	restFactory.getPAA = function(idP){
+		return $http.get("http://localhost:8080/RAPSO-web/webresources/usuario/getPAlum/"+idP);
+	};
+
+	restFactory.getAllE = function(tipo){
+		return $http.get("http://localhost:8080/RAPSO-web/webresources/usuario/getAllE/"+tipo);
+	};
+
+	restFactory.asociar = function(rutP, rutA){
+		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/asociar/"+rutP+"/"+rutA);
+	};
+
+	restFactory.getTUCustom = function(){
+		return $http.get("http://localhost:8080/RAPSO-web/webresources/usuario/getTUCustom");
+	};
+
+	restFactory.desligar = function(rutP, rutA){
+		return $http.post("http://localhost:8080/RAPSO-web/webresources/usuario/desligar/"+rutP+"/"+rutA);
+	};
+
+	restFactory.getPByAA = function(idAA){
+		return $http.get("http://localhost:8080/RAPSO-web/webresources/usuario/getPByAlum/"+idAA);
+	};
+
 	return restFactory;
 }]);

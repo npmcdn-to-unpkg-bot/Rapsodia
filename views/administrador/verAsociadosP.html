@@ -1,7 +1,5 @@
-<md-content  class="md-whiteframe-z3" flex>
-
-
-<div layout = "row">
+<md-content  class="md-whiteframe-z3" flex >
+ <div layout = "row">
   <div>
    <md-button id="main" class="md-icon-button"  aria-label="Show User List" ng-click = "back()">
     <md-icon md-svg-icon="img/icon/ic_arrow_back_black_48px.svg" ></md-icon>
@@ -9,14 +7,13 @@
   </div>
   <div>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="#/home/profesor">Inicio</a></li>
+      <li class="breadcrumb-item"><a href="#/home/administrador">Inicio</a></li>
+      <li class="breadcrumb-item"><a href="#/home/administrador/cuentasP">Cuentas Profesores</a></li>
       <li class="breadcrumb-item active">Cuentas Asociados</li>
     </ol>
   </div>
 </div>
-
     <div layout = "column" layout-align="center center">
-
                       <div>
                        <br>
                         <h3>Asociar Usuario</h3>
@@ -59,7 +56,8 @@
         <br>
           <h3>Cuentas de asociados</h3>
     </div>
-            <!-- FILTRADO -->
+    
+    <!-- FILTRADO -->
             <div layout = "column" layout-align="center center">
                 <div  layout="row" layout-align="center center">
                     <div>
@@ -81,8 +79,6 @@
                   </div>
                 </div>
             </div>
-
-
     <div  layout="row" layout-align="center">
           <div flex-gt-md="60" flex-md="80" flex-xs="100">
               <div grid-data id='test' grid-options="gridOptions" grid-actions="gridActions">

@@ -18,7 +18,8 @@ app.service('fileUpload', ['$http', function ($http) {
 app.service('sesion',['$window',function($window) {
 
     this.user = JSON.parse($window.localStorage.getItem('sesion.user'));
-    this.userToEdit  = JSON.parse($window.localStorage.getItem('sesion.userToEdit'));     
+    this.userToEdit  = JSON.parse($window.localStorage.getItem('sesion.userToEdit'));
+    this.userAux  = JSON.parse($window.localStorage.getItem('sesion.userAux'));        
 
     this.getUser = function(){
         return this.user;
@@ -28,15 +29,25 @@ app.service('sesion',['$window',function($window) {
         return this.userToEdit;
     };
 
+    this.getUserAux = function(){
+        return this.userAux;
+    };
+
     this.setUser = function(user){
         this.user = user;
         $window.localStorage.setItem('sesion.user', JSON.stringify(user));
         return this;
     };
 
-     this.setUserToEdit = function(user1){
+    this.setUserToEdit = function(user1){
         this.userToEdit = user1;
         $window.localStorage.setItem('sesion.userToEdit', JSON.stringify(user1));
+        return this;
+    };
+
+    this.setUserAux = function(user2){
+        this.userAux = user2;
+        $window.localStorage.setItem('sesion.userAux', JSON.stringify(user2));
         return this;
     };
 
@@ -47,10 +58,13 @@ app.service('sesion',['$window',function($window) {
     this.destroyUserToEdit = function destroy(){
         this.setUserToEdit(null);
     };
+
+    this.destroyUserAux = function destroy(){
+        this.setUserAux(null);
+    };
  }]);
 
-app.service('auth',['$http', 'sesion', '$location', 
-  function($http, sesion, $location) {
+app.service('auth',['$http', 'sesion', '$location', function($http, sesion, $location) {
     
     this.isLoggedIn = function isLoggedIn(){
       return sesion.getUser() !== null;
@@ -68,8 +82,20 @@ app.service('auth',['$http', 'sesion', '$location',
         return sesion.getUserToEdit().rutU == "18486956-k";
     }
 
+    this.isAdministrador = function isAdministrador(){
+        return sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == "Administrador";
+    }
+
     this.isAlumnoAyudante = function isAlumnoAyudante(){
         return  sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == "Alumno" ||  sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == "Ayudante";
+    };
+
+    this.isCerrada = function isCerrada(){
+        return  sesion.getUser().estadoidEstado.nombreE == "Cerrada";
+    };
+
+    this.isAbierta = function isAbierta(){
+        return  sesion.getUser().estadoidEstado.nombreE == "Abierta";
     };
 
  }]);

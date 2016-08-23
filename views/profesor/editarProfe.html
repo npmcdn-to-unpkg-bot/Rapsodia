@@ -1,4 +1,19 @@
 <md-content class="md-whiteframe-z3" flex >
+
+<div layout = "row">
+  <div>
+   <md-button id="main" class="md-icon-button"  aria-label="Show User List" ng-click = "back()">
+    <md-icon md-svg-icon="img/icon/ic_arrow_back_black_48px.svg" ></md-icon>
+   </md-button>
+  </div>
+  <div>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#/home/profesor">Inicio</a></li>
+      <li class="breadcrumb-item"><a href="#/home/profesor/perfil">Perfil Usuario</a></li>
+      <li class="breadcrumb-item active">Edición Perfil</li>
+    </ol>
+  </div>
+</div>
                 <div layout = "column">
                 <!-- Editar de la columna-->
                 <div>
@@ -27,6 +42,12 @@
                             <md-input-container>
                               <label>Nombre</label>
                               <input type="text" name = "nombre" ng-required = "true" ng-model="usuario.nombreU" disabled>
+                            </md-input-container>
+                          </div>
+                          <div>
+                            <md-input-container>
+                              <label>Apellido</label>
+                              <input type="text" name = "apellido" ng-required = "true" ng-model="usuario.apellidoU" disabled>
                             </md-input-container>
                           </div>
                           <div>
@@ -77,7 +98,7 @@
                                 </md-input-container>
                           </div>
                           <div layout = "column" layout-align = "center center">
-                            <md-button class="md-raised md-primary" ng-disabled = "editar.apodo.$invalid" ng-click="editarP()">Actualizar</md-button>
+                            <md-button class="md-raised md-primary" ng-disabled = "editar.apodo.$invalid || editar.file.$invalid" ng-click="editarP()">Actualizar</md-button>
                             <md-button ng-click= "cancelar()">Cancelar</md-button>
                           </div>
                       </div>
@@ -114,32 +135,6 @@
                       </div>
                     </form>
                   </div>
-
-                    <!-- Eliminar cuenta -->
-                  <div>
-                    <form name="delete">
-                      <div layout = "column" layout-align="center center">
-                      <br>
-                        <h3>Eliminar Cuenta</h3>
-                        <br>
-                          <div>
-                            <md-input-container>
-                              <label>Motivo Eliminación</label>
-                              <input type="text" name = "me" ng-required = "true" ng-model="motivoE" required = "true">
-                              <div ng-messages="delete.me.$error">
-                                <div ng-message="required">Motivo requerido!</div>
-                              </div>
-                            </md-input-container>
-                          </div>
-                          <div layout = "column" layout-align="center center">
-                            <md-button class="md-raised md-primary" ng-disabled = "motivoE == null " ng-click="eliminarC()">Eliminar Cuenta</md-button>
-                            <md-button ng-click= "cancelar()">Cancelar</md-button>
-                          </div>
-                      </div>
-                    </form>
-                  </div>
-
-
                 </div>
 </md-content>
 

@@ -1,7 +1,5 @@
-<md-content  class="md-whiteframe-z3" flex>
-
-
-<div layout = "row">
+<md-content flex class="md-whiteframe-z3">
+ <div layout = "row">
   <div>
    <md-button id="main" class="md-icon-button"  aria-label="Show User List" ng-click = "back()">
     <md-icon md-svg-icon="img/icon/ic_arrow_back_black_48px.svg" ></md-icon>
@@ -9,57 +7,25 @@
   </div>
   <div>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="#/home/profesor">Inicio</a></li>
-      <li class="breadcrumb-item active">Cuentas Asociados</li>
+      <li class="breadcrumb-item"><a href="#/home/alumno">Inicio</a></li>
+      <li class="breadcrumb-item"><a href="#/home/alumno/verAsociadosP">Ver Profesores</a></li>
+      <li class="breadcrumb-item active">Usuarios Asociados</li>
     </ol>
   </div>
 </div>
+        <div layout = "column" layout-align="center center">
+          <br>
+          <h3>Cuentas asociadas</h3>
+        </div>
 
-    <div layout = "column" layout-align="center center">
-
-                      <div>
-                       <br>
-                        <h3>Asociar Usuario</h3>
-                        <br>
-                      </div>
-                      <div layout = "row" layout-align="center center">
-                          <div>
+        <div layout = "column" layout-align="center center">
                             <md-input-container>
                               <label>Profesor: </label>
                               <input type="text" ng-model="profe" disabled>
                             </md-input-container>
                           </div>
-                          <div>
-                            <md-input-container>
-                              <label>Usuarios</label>
-                              <md-select ng-model="opcionSelected">
-                                <md-option ng-value = "t" ng-repeat="t in opciones">
-                                  {{t.nombreU}} {{t.apellidoU}} - {{t.rutU}}
-                                </md-option>
-                              </md-select>
-                            </md-input-container>
-                          </div>
-                          <div>
-                            <md-input-container>
-                              <label>Rol</label>
-                              <md-select ng-change = "change()" ng-model="tipoSelected">
-                                <md-option  ng-value = "tipo" ng-repeat="tipo in tiposUsuario">
-                                  {{tipo.nombreTU}}
-                                </md-option>
-                              </md-select>
-                            </md-input-container>
-                          </div>
-                      </div>
-                      <br>
-                      <div layout = "column" layout-align="center center">
-                        <md-button class="md-raised md-primary" ng-disabled = "opcionSelected.nombreU == undefined" ng-click="asociarC()">Asociar</md-button>
-                      </div>
-    </div>
-    <div layout = "column" layout-align="center center">
-        <br>
-          <h3>Cuentas de asociados</h3>
-    </div>
-            <!-- FILTRADO -->
+
+         <!-- FILTRADO -->
             <div layout = "column" layout-align="center center">
                 <div  layout="row" layout-align="center center">
                     <div>
@@ -82,8 +48,7 @@
                 </div>
             </div>
 
-
-    <div  layout="row" layout-align="center">
+        <div  layout="row" layout-align="center">
           <div flex-gt-md="60" flex-md="80" flex-xs="100">
               <div grid-data id='test' grid-options="gridOptions" grid-actions="gridActions">
                   <!-- paginación -->
@@ -145,7 +110,7 @@
                           <!-- Cabeceras -->
                           </thead>
                           <tbody>
-                          <tr grid-item ng-click="sendToDes(item)">
+                          <tr grid-item ng-click="sendEdicion(item)">
                               <!-- Acceso a los elementos -->
                                 <td ng-bind="item.emailU"></td>
                                 <td ng-bind="item.nombreU"></td>
@@ -180,8 +145,5 @@
                   <!-- Paginacion-->
               </div>
           </div>
-    </div>
-
-
-    
+        </div>
 </md-content>

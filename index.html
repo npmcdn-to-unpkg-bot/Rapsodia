@@ -9,9 +9,10 @@
 
     <!-- Bootstrap -->
      <link href="css/angular-material.css" rel="stylesheet">
-     <link href="css/bootstrap.min.css" rel="stylesheet">
+     <link href="css/bootstrap.css" rel="stylesheet">
      <link href="css/hd.css" rel="stylesheet">
      <link rel="stylesheet" href="css/material-indigo-blue.css">
+    <link href="css/material-icons.css" rel="stylesheet">
   </head>
   <body layout = "column" ng-app = "mainApp" ng-cloak>
   <div layout = "row" flex>
@@ -37,37 +38,59 @@
 
             <md-content layout-padding>
               <!-- Usuario no logeado -->
-              <div  ng-if = "auth.isLoggedIn() == false">
+              <div  ng-if = "auth.isLoggedIn() == false || sesion.getUser().estadoidEstado.nombreE == 'Cerrada'">
                 <p>
                   Rapsodia es una plataforma para el aprendizaje y aplicación de los conceptos de las pruebas de software.
                 </p>
               </div>
               <!-- Alumno / Ayudante-->
-              <div ng-if = "sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Alumno' || sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Ayudante'">
+              <div ng-if = "(sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Alumno' || sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Ayudante') && sesion.getUser().estadoidEstado.nombreE == 'Abierta'">
                   <md-list>
                     <md-list-item ng-click = "perfilAA()">
                         <span>VER PERFIL</span>
                         <span flex></span>
                     </md-list-item>
+                    <md-list-item ng-click = "verProfeAsociado()">
+                        <span>VER PROFESORES</span>
+                        <span flex></span>
+                    </md-list-item>
                   </md-list>
               </div>
               <!-- Profesor -->
-              <div ng-if = "sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Profesor'">
+              <div ng-if = "sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Profesor' && sesion.getUser().estadoidEstado.nombreE == 'Abierta'">
                   <md-list>
                     <md-list-item ng-click = "perfilP()">
                         <span>VER PERFIL</span>
                         <span flex></span>
                     </md-list-item>
-                    <md-list-item ng-click = "crear()">
-                        <span>CREAR USUARIO</span>
-                        <span flex></span>
-                    </md-list-item>
                     <md-list-item ng-click = "ver()">
-                        <span>CUENTAS DE USUARIO</span>
+                        <span>CUENTAS ASOCIADOS</span>
                         <span flex></span>
                     </md-list-item>
                   </md-list>
-              </div>                     
+              </div>
+              <!-- Administrador -->
+              <div ng-if = "sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Administrador' && sesion.getUser().estadoidEstado.nombreE == 'Abierta'">
+                  <md-list>
+                    <md-list-item ng-click = "perfilPA()">
+                        <span>VER PERFIL</span>
+                        <span flex></span>
+                    </md-list-item>
+                    <md-list-item ng-click = "crearA()">
+                        <span>CREAR USUARIO</span>
+                        <span flex></span>
+                    </md-list-item>
+                    <md-list-item ng-click = "verA()">
+                        <span>CUENTAS USUARIOS</span>
+                        <span flex></span>
+                    </md-list-item>
+                    <md-list-item ng-click = "verCuentasP()">
+                        <span>CUENTAS PROFESORES</span>
+                        <span flex></span>
+                    </md-list-item>
+                  </md-list>
+              </div> 
+
             </md-content>
           </div>
         </md-sidenav>
@@ -85,7 +108,8 @@
                   <md-button id="main" class="menu" hide-gt-md ng-click="toggleLeft()" aria-label="Show User List">
                     <md-icon md-svg-icon="img/icon/ic_menu_white_18px.svg"></md-icon>
                   </md-button>
-                  <a href="#/home/alumno"><span>Rapsodia</span></a>
+                  <div ng-if = "sesion.getUser().estadoidEstado.nombreE == 'Abierta'"><a href="#/home/alumno"><span>Rapsodia</span></a></div>
+                  <div ng-if = "sesion.getUser().estadoidEstado.nombreE == 'Cerrada'"><a href="#/home/alumno/activar"><span>Rapsodia</span></a></div>
                   <span flex ></span>
                       <!-- Menu -->
                       <md-menu-bar >
@@ -96,12 +120,15 @@
                             </button>
                           </div>
                           <md-menu-content>
+                          <div ng-if = "sesion.getUser().estadoidEstado.nombreE == 'Abierta'">
                           <md-menu-item>
-                              <md-button ng-click="editP()">
+                              <md-button  ng-click="editP()">
                                 Editar Perfil
                               </md-button>
                             </md-menu-item>
                             <md-menu-divider></md-menu-divider>  
+                          </div>
+                            
                             <md-menu-item>
                               <md-button ng-click="close()">
                                 Cerrar Sesión
@@ -111,14 +138,13 @@
                       </md-menu-bar>
                       <!-- Menu -->
                </div>
-              <!--Toolbar profesor -->
+               <!--Toolbar profesor -->
                <div class="md-toolbar-tools" ng-if = "auth.isLoggedIn() == true && sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Profesor'">
                   <md-button id="main" class="menu" hide-gt-md ng-click="toggleLeft()" aria-label="Show User List">
                     <md-icon md-svg-icon="img/icon/ic_menu_white_18px.svg"></md-icon>
                   </md-button>
-                  <h2>
-                    <a href="#/home/profesor"><span>Rapsodia</span></a>
-                  </h2>
+                  <div ng-if = "sesion.getUser().estadoidEstado.nombreE == 'Abierta'"><a href="#/home/profesor"><span>Rapsodia</span></a></div>
+                  <div ng-if = "sesion.getUser().estadoidEstado.nombreE == 'Cerrada'"><a href="#/home/profesor/activar"><span>Rapsodia</span></a></div>                  
                   <span flex></span>
                   <md-button class="md-icon-button" aria-label="More" ng-if = "isSearch">
                         <md-icon md-svg-icon="img/icon/ic_search_white_18px.svg"></md-icon>
@@ -132,12 +158,15 @@
                           </button>
                         </div>
                         <md-menu-content>
-                        <md-menu-item>
-                            <md-button ng-click="editProfe()">
-                              Editar Perfil
-                            </md-button>
-                          </md-menu-item>
-                          <md-menu-divider></md-menu-divider>  
+                        <div ng-if = "sesion.getUser().estadoidEstado.nombreE == 'Abierta'">
+                          <md-menu-item>
+                              <md-button ng-click="editProfe()">
+                                Editar Perfil
+                              </md-button>
+                            </md-menu-item>
+                            <md-menu-divider></md-menu-divider>  
+                        </div>
+                          
                           <md-menu-item>
                             <md-button ng-click="close()">
                               Cerrar Sesión
@@ -147,11 +176,49 @@
                     </md-menu-bar>
                     <!-- Menu -->
                </div>
-              <!-- Toolbar Inicio -->
-              <div class="md-toolbar-tools" ng-if = "auth.isLoggedIn() == false">
-                  <a href="#/home/alumno"><span>Rapsodia</span></a>
+               <!--Toolbar administrador -->
+               <div class="md-toolbar-tools" ng-if = "auth.isLoggedIn() == true && sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Administrador'">
+                  <md-button id="main" class="menu" hide-gt-md ng-click="toggleLeft()" aria-label="Show User List">
+                    <md-icon md-svg-icon="img/icon/ic_menu_white_18px.svg"></md-icon>
+                  </md-button>
+                  <div ng-if = "sesion.getUser().estadoidEstado.nombreE == 'Abierta'"><a href="#/home/administrador"><span>Rapsodia</span></a></div>
+                  <div ng-if = "sesion.getUser().estadoidEstado.nombreE == 'Cerrada'"><a href="#/home/administrador/activar"><span>Rapsodia</span></a></div>
                   <span flex></span>
-              </div>
+                  <md-button class="md-icon-button" aria-label="More" ng-if = "isSearch">
+                        <md-icon md-svg-icon="img/icon/ic_search_white_18px.svg"></md-icon>
+                  </md-button>
+                    <!-- Menu -->
+                    <md-menu-bar>
+                      <md-menu >
+                        <div ng-click="$mdOpenMenu()">
+                          <button class="md-icon-button" aria-label="More">
+                            <md-icon md-svg-icon="img/icon/ic_more_vert_white_18px.svg"></md-icon>
+                          </button>
+                        </div>
+                        <md-menu-content>
+                        <div ng-if = "sesion.getUser().estadoidEstado.nombreE == 'Abierta'">
+                          <md-menu-item>
+                            <md-button ng-click="editAdmin()">
+                              Editar Perfil
+                            </md-button>
+                          </md-menu-item>
+                          <md-menu-divider></md-menu-divider>  
+                        </div>
+                         
+                          <md-menu-item>
+                            <md-button ng-click="close()">
+                              Cerrar Sesión
+                            </md-button>
+                          </md-menu-item>                      
+                      </md-menu>
+                    </md-menu-bar>
+                    <!-- Menu -->
+               </div>
+               <!-- Toolbar Inicio -->
+               <div class="md-toolbar-tools" ng-if = "auth.isLoggedIn() == false">
+                    <a href="#/"><span>Rapsodia</span></a>
+                    <span flex></span>
+               </div>
             </div>
           </md-toolbar>
         </div>
@@ -174,7 +241,6 @@
     <script src = "js/controller.js"></script>
     <script src = "js/factories.js"></script>
     <script src = "js/app.js"></script>
-    <script src = "js/directive.js" ></script>
     <script src = "js/rutDirective.js" ></script>
     <script src = "js/service.js"></script>
     <script src = "js/pagination.js"></script>
