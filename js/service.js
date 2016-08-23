@@ -55,11 +55,11 @@ app.service('sesion',['$window',function($window) {
         this.setUser(null);
     };
 
-    this.destroyUserToEdit = function destroy(){
+    this.destroyUserToEdit = function destroyUserToEdit(){
         this.setUserToEdit(null);
     };
 
-    this.destroyUserAux = function destroy(){
+    this.destroyUserAux = function destroyUserAux(){
         this.setUserAux(null);
     };
  }]);
@@ -71,31 +71,38 @@ app.service('auth',['$http', 'sesion', '$location', function($http, sesion, $loc
     };
 
     this.isProfesor = function isProfesor(){
-        return sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == "Profesor";
+        return sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Profesor';
     };
 
     this.isAdmin = function isAdmin(){
-        return sesion.getUser().rutU == "18486956-k";
+        return sesion.getUser().rutU == '18486956-k';
     }
 
      this.isAdminE = function isAdminE(){
-        return sesion.getUserToEdit().rutU == "18486956-k";
+        return sesion.getUserToEdit().rutU == '18486956-k';
     }
 
     this.isAdministrador = function isAdministrador(){
-        return sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == "Administrador";
+        return sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Administrador';
     }
 
     this.isAlumnoAyudante = function isAlumnoAyudante(){
-        return  sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == "Alumno" ||  sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == "Ayudante";
+        return  sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Alumno' ||  sesion.getUser().tipoUsuarioidTipoUsuario.nombreTU == 'Ayudante';
     };
 
     this.isCerrada = function isCerrada(){
-        return  sesion.getUser().estadoidEstado.nombreE == "Cerrada";
+        return  sesion.getUser().estadoidEstado.nombreE == 'Cerrada';
     };
 
     this.isAbierta = function isAbierta(){
-        return  sesion.getUser().estadoidEstado.nombreE == "Abierta";
+        return  sesion.getUser().estadoidEstado.nombreE == 'Abierta';
     };
 
+    this.isUserToEdit = function isUserToEdit(){
+         return sesion.getUserToEdit() !== null;
+    }
+
+    this.isUserAux = function isUserAux(){
+         return sesion.getUserAux() !== null;
+    }
  }]);

@@ -96,6 +96,7 @@ app.controller("tbCtrl", function($rootScope, $scope, $location, $http, restFact
 	$scope.close = function(){
 		$rootScope.sesion.destroy();
 		$rootScope.sesion.destroyUserToEdit();
+		$rootScope.sesion.destroyUserAux();
 		$location.path("/");
 	}
 
@@ -491,6 +492,7 @@ app.controller("cuentasAACtrl", function($rootScope, $scope, $location, $http, r
 	}
 
 	$scope.back = function(){
+		$rootScope.sesion.destroyUserToEdit();
 		$location.path("/home/alumno/verAsociadosP");
 	}
 });
@@ -498,6 +500,7 @@ app.controller("verAACtrl", function($rootScope, $scope, $location, $http, restF
 	$scope.usuario = $rootScope.sesion.getUserAux();	
 
 	$scope.back = function(){
+		$rootScope.sesion.destroyUserAux();
 		$location.path("/home/alumno/verAsociadosAA");
 	}
 });
@@ -854,6 +857,7 @@ app.controller("infoCtrlProfe", function($rootScope, $scope, $location, $http, r
 				    restFactory.desligar($rootScope.sesion.getUser().rutU, $scope.usuario.rutU).success(function(response){
 						if(response.message == "true"){
 							$scope.showSimpleToast("Usuario desligado, se le enviará un correo electrónico");
+							$rootScope.sesion.destroyUserToEdit();
 							$location.path("/home/profesor/ver");
 						}else{
 							$scope.showAlert("Error al desligar el usuario del profesor. Intente más tarde.");
@@ -1578,6 +1582,7 @@ app.controller("asociadosPAdminCtrl", function($rootScope, $scope, $location, $h
 	}
 
 	$scope.back = function(){
+		$rootScope.sesion.destroyUserToEdit();
 		$location.path("/home/administrador/cuentasP");
 	}
 });
@@ -1631,6 +1636,7 @@ app.controller("desligarAdminCtrl", function($rootScope, $scope, $location, $htt
 				    restFactory.desligar($rootScope.sesion.getUserToEdit().rutU, $scope.usuario.rutU).success(function(response){
 						if(response.message == "true"){
 							$scope.showSimpleToast("Usuario desligado, se le enviará un correo electrónico");
+							$rootScope.sesion.destroyUserAux();
 							$location.path("/home/administrador/verAsociadosP");
 						}else{
 							$scope.showAlert("Error al desligar el usuario del profesor. Intente más tarde.");

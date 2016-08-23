@@ -3,11 +3,13 @@ app.config(function($routeProvider){
 	.when("/", {
 		resolve: {
 			"check": function($location,$rootScope){
-				if( $rootScope.auth.isLoggedIn()){
+				if($rootScope.auth.isLoggedIn()){
 					if($rootScope.auth.isProfesor()){
 						$location.path('/home/profesor');
 					}else if($rootScope.auth.isAlumnoAyudante()){
 						$location.path('/home/alumno');
+					}else if($rootScope.auth.isAdministrador()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -23,6 +25,8 @@ app.config(function($routeProvider){
 						$location.path('/home/profesor');
 					}else if($rootScope.auth.isAlumnoAyudante()){
 						$location.path('/home/alumno');
+					}else if($rootScope.auth.isAdministrador()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -40,6 +44,8 @@ app.config(function($routeProvider){
 				}else{
 					if($rootScope.auth.isProfesor()){
 						$location.path('/home/profesor');
+					}else if($rootScope.auth.isAdministrador()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -56,6 +62,8 @@ app.config(function($routeProvider){
 				}else{
 					if($rootScope.auth.isProfesor()){
 						$location.path('/home/profesor');
+					}else if($rootScope.auth.isAdministrador()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -72,6 +80,8 @@ app.config(function($routeProvider){
 				}else{
 					if($rootScope.auth.isProfesor()){
 						$location.path('/home/profesor');
+					}else if($rootScope.auth.isAdministrador()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -88,6 +98,10 @@ app.config(function($routeProvider){
 				}else{
 					if($rootScope.auth.isProfesor()){
 						$location.path('/home/profesor');
+					}else if($rootScope.auth.isAdministrador()){
+						$location.path('/home/administrador');
+					}else if($rootScope.auth.isAlumnoAyudante() && $rootScope.auth.isAbierta()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -104,6 +118,8 @@ app.config(function($routeProvider){
 				}else{
 					if($rootScope.auth.isProfesor()){
 						$location.path('/home/profesor');
+					}else if($rootScope.auth.isAdministrador()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -120,6 +136,10 @@ app.config(function($routeProvider){
 				}else{
 					if($rootScope.auth.isProfesor()){
 						$location.path('/home/profesor');
+					}else if($rootScope.auth.isAdministrador()){
+						$location.path('/home/administrador');
+					}else if($rootScope.auth.isAlumnoAyudante() && !$rootScope.auth.isUserToEdit()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -136,6 +156,10 @@ app.config(function($routeProvider){
 				}else{
 					if($rootScope.auth.isProfesor()){
 						$location.path('/home/profesor');
+					}else if($rootScope.auth.isAdministrador()){
+						$location.path('/home/administrador');
+					}else if($rootScope.auth.isAlumnoAyudante() && !$rootScope.auth.isUserAux()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -147,11 +171,13 @@ app.config(function($routeProvider){
 	.when("/home/profesor", {
 		resolve: {
 			"check": function($location,$rootScope){
-				if( !$rootScope.auth.isLoggedIn()){
+				if(!$rootScope.auth.isLoggedIn()){
 					$location.path('/');
 				}else{
 					if($rootScope.auth.isAlumnoAyudante()){
 						$location.path('/home/alumno');
+					}else if($rootScope.auth.isAdministrador()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -168,6 +194,8 @@ app.config(function($routeProvider){
 				}else{
 					if($rootScope.auth.isAlumnoAyudante()){
 						$location.path('/home/alumno');
+					}else if($rootScope.auth.isAdministrador()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -185,6 +213,8 @@ app.config(function($routeProvider){
 				}else{
 					if($rootScope.auth.isAlumnoAyudante()){
 						$location.path('/home/alumno');
+					}else if($rootScope.auth.isAdministrador()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -203,6 +233,8 @@ app.config(function($routeProvider){
 				}else{
 					if($rootScope.auth.isAlumnoAyudante()){
 						$location.path('/home/alumno');
+					}else if($rootScope.auth.isAdministrador()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -221,6 +253,10 @@ app.config(function($routeProvider){
 				}else{
 					if($rootScope.auth.isAlumnoAyudante()){
 						$location.path('/home/alumno');
+					}else if($rootScope.auth.isAdministrador()){
+						$location.path('/home/administrador');
+					}else if($rootScope.auth.isProfesor() && !$rootScope.auth.isUserToEdit()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -235,6 +271,14 @@ app.config(function($routeProvider){
 			"check": function($location,$rootScope){
 				if( !$rootScope.auth.isLoggedIn()){
 					$location.path('/');
+				}else{
+					if($rootScope.auth.isAlumnoAyudante()){
+						$location.path('/home/alumno');
+					}else if($rootScope.auth.isAdministrador()){
+						$location.path('/home/administrador');
+					}else if($rootScope.auth.isProfesor() && $rootScope.auth.isAbierta()){
+						$location.path('/home/administrador');
+					}
 				}
 			}	
 		},
@@ -348,7 +392,10 @@ app.config(function($routeProvider){
 						$location.path('/home/alumno');
 					}else if($rootScope.auth.isProfesor()){
 						$location.path('/home/profesor');
+					}else if($rootScope.auth.isAdministrador() && !$rootScope.auth.isUserToEdit()){
+						$location.path('/home/administrador');
 					}
+
 				}
 			}	
 		},
@@ -367,6 +414,8 @@ app.config(function($routeProvider){
 						$location.path('/home/alumno');
 					}else if($rootScope.auth.isProfesor()){
 						$location.path('/home/profesor');
+					}else if($rootScope.auth.isAdministrador() && !$rootScope.auth.isUserToEdit()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -382,8 +431,12 @@ app.config(function($routeProvider){
 				if( !$rootScope.auth.isLoggedIn()){
 					$location.path('/');
 				}else{
-					if($rootScope.auth.isProfesor()){
+					if($rootScope.auth.isAlumnoAyudante()){
+						$location.path('/home/alumno');
+					}else if($rootScope.auth.isProfesor()){
 						$location.path('/home/profesor');
+					}else if($rootScope.auth.isAdministrador() && $rootScope.auth.isAbierta()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -398,7 +451,9 @@ app.config(function($routeProvider){
 				if( !$rootScope.auth.isLoggedIn()){
 					$location.path('/');
 				}else{
-					if($rootScope.auth.isProfesor()){
+					if($rootScope.auth.isAlumnoAyudante()){
+						$location.path('/home/alumno');
+					}else if($rootScope.auth.isProfesor()){
 						$location.path('/home/profesor');
 					}
 				}
@@ -414,8 +469,12 @@ app.config(function($routeProvider){
 				if( !$rootScope.auth.isLoggedIn()){
 					$location.path('/');
 				}else{
-					if($rootScope.auth.isProfesor()){
+					if($rootScope.auth.isAlumnoAyudante()){
+						$location.path('/home/alumno');
+					}else if($rootScope.auth.isProfesor()){
 						$location.path('/home/profesor');
+					}else if($rootScope.auth.isAdministrador() && !$rootScope.auth.isUserToEdit()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
@@ -430,8 +489,12 @@ app.config(function($routeProvider){
 				if( !$rootScope.auth.isLoggedIn()){
 					$location.path('/');
 				}else{
-					if($rootScope.auth.isProfesor()){
+					if($rootScope.auth.isAlumnoAyudante()){
+						$location.path('/home/alumno');
+					}else if($rootScope.auth.isProfesor()){
 						$location.path('/home/profesor');
+					}else if($rootScope.auth.isAdministrador() && !$rootScope.auth.isUserAux()){
+						$location.path('/home/administrador');
 					}
 				}
 			}	
