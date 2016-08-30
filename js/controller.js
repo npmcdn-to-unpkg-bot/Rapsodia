@@ -364,14 +364,36 @@ app.controller("editarAlumCtrl", function($rootScope, $scope, $location, $http, 
 				if($scope.pass != undefined && $scope.passC != undefined && $scope.pass != "" && $scope.passC != "" && $scope.pass != null && $scope.passC != null){
 					$scope.usuario.contrasenaU = $scope.pass;
 				}
-				if(file != undefined){
-					$scope.usuario.fotoPerfilU = "img/"+file.name;
-						Upload.upload({
+
+					if(file != undefined){
+					$scope.photoP = "img/"+file.name;
+					test = Upload.upload({
 				            url: 'server.php',
 				            data: {file: file, 'username': $scope.usuario.rutU}
-				        });
+				        })
+				        .then(function (resp) {
+					            $scope.usuario.fotoPerfilU = $scope.photoP;
+					           	restFactory.editarUsuario($scope.usuario)
+									.success(function(response){
+										if(response){
+											var user = response;
+											$rootScope.sesion.setUser(user);
+											$scope.showSimpleToast("Edición efectuada, se le notificará por correo electrónico");
+											 $location.path("/home/alumno/info");
+										}else{
+											$scope.showAlert("Error al realizar la edición intente más tarde.");
+										}
+								});
+								
+ 				        },
+						  function(error) {
+						  	$scope.showAlert("Error al guardar su fotografía de perfil, intente más tarde.");
+						  });
+
 				}
-				
+
+				else{
+					
 					restFactory.editarUsuario($scope.usuario)
 						.success(function(response){
 							if(response){
@@ -383,6 +405,7 @@ app.controller("editarAlumCtrl", function($rootScope, $scope, $location, $http, 
 								$scope.showAlert("Error al realizar la edición intente más tarde.");
 							}
 					});
+				}
 								
 			    }, function() {
 			    	return "";
@@ -605,13 +628,35 @@ app.controller("editarProfeCtrl", function($rootScope, $scope, $location, $http,
 				}
 
 				if(file != undefined){
-					$scope.usuario.fotoPerfilU = "img/"+file.name;
-					Upload.upload({
+					$scope.photoP = "img/"+file.name;
+					test = Upload.upload({
 				            url: 'server.php',
 				            data: {file: file, 'username': $scope.usuario.rutU}
-				        });
+				        })
+				        .then(function (resp) {
+					            $scope.usuario.fotoPerfilU = $scope.photoP;
+					           	restFactory.editarUsuario($scope.usuario)
+									.success(function(response){
+										if(response){
+											var user = response;
+											$rootScope.sesion.setUser(user);
+											$scope.showSimpleToast("Edición efectuada, se le enviará un correo electrónico");
+											$location.path("/home/profesor/perfil");
+										}else{
+											$scope.showAlert("Error al realizar la edición intente más tarde.");
+										}	
+									
+								});
+								
+ 				        },
+						  function(error) {
+						  	$scope.showAlert("Error al guardar su fotografía de perfil, intente más tarde.");
+						  });
+
 				}
 
+				else{
+					
 					restFactory.editarUsuario($scope.usuario)
 						.success(function(response){
 							if(response){
@@ -624,6 +669,7 @@ app.controller("editarProfeCtrl", function($rootScope, $scope, $location, $http,
 							}	
 						
 					});
+				}
 					return "";
 			    }, function() {
 			    	return "";
@@ -951,7 +997,6 @@ app.controller("editarAdminCtrl", function($rootScope, $scope, $location, $http,
 					return "";
 				}
 			}
-
 	    		var confirm = $mdDialog.confirm()
 			          .title('Desea actualizar su perfil?')
 			          .textContent('Su perfil será actualizado')
@@ -969,13 +1014,36 @@ app.controller("editarAdminCtrl", function($rootScope, $scope, $location, $http,
 					$scope.usuario.contrasenaU = $scope.pass;
 				}
 
-				if(file != undefined){
-					$scope.usuario.fotoPerfilU = "img/"+file.name;
-					Upload.upload({
+					if(file != undefined){
+					$scope.photoP = "img/"+file.name;
+					 Upload.upload({
 				            url: 'server.php',
 				            data: {file: file, 'username': $scope.usuario.rutU}
-				        });
+				        })
+				        .then(function (resp) {
+					            $scope.usuario.fotoPerfilU = $scope.photoP;
+					           
+								restFactory.editarUsuario($scope.usuario)
+									.success(function(response){
+										if(response){
+											$rootScope.sesion.setUser(response);
+											$scope.showSimpleToast("Edición efectuada, se le enviará un correo electrónico");
+											$location.path("/home/administrador/perfil");
+										}else{
+											$scope.showAlert("Error al realizar la edición intente más tarde.");
+										}	
+								});
+								
+ 				        },
+						  function(error) {
+						  	$scope.showAlert("Error al guardar su fotografía de perfil, intente más tarde.");
+						  });
+
 				}
+
+				else{
+					
+					
 					restFactory.editarUsuario($scope.usuario)
 						.success(function(response){
 							if(response){
@@ -986,6 +1054,8 @@ app.controller("editarAdminCtrl", function($rootScope, $scope, $location, $http,
 								$scope.showAlert("Error al realizar la edición intente más tarde.");
 							}	
 					});
+				}
+
 					return "";
 			    }, function() {
 			    	return "";

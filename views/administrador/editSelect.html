@@ -50,27 +50,36 @@
                           <div>
                             <md-input-container>
                               <label>Apodo</label>
-                              <input type="text" name = "apodo" ng-required = "true" ng-model="apodo">
-                              <div ng-messages="edita"edita.apodo.$error">
+                              <input type="text" name = "apodo" ng-required = "true" ng-model="apodo" ng-maxlength="30">
+                              <div ng-messages="edita.apodo.$error">
                                 <div ng-message="required">Apodo requerido!</div>
+                                <div ng-message="maxlength">Máximo 30 caracteres</div>
                               </div>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Contraseña</label>
-                              <input type="password" name = "pass" ng-model="pass">
+                              <input type="password" name = "pass" ng-model="pass" ng-maxlength="45">
+                              <div ng-messages="edita.pass.$error">
+                                <div ng-message="maxlength">Máximo 45 caracteres</div>
+                            </div>
                             </md-input-container>
+                            
                           </div>
                           <div>
                             <md-input-container>
                               <label>Confirmar Contraseña</label>
-                              <input type="password" name = "passC" ng-model="passC">
+                              <input type="password" name = "passC" ng-model="passC" ng-maxlength="45">
+                              <div ng-messages="edita.passC.$error">
+                                <div ng-message="maxlength">Máximo 45 caracteres</div>
+                            </div>
                             </md-input-container>
+                            
                           </div>
                           <br>
                           <div layout = "column" layout-align = "center center">
-                            <md-button class="md-raised md-primary" ng-disabled = "edita.apodo.$invalid" ng-click="editar()">Actualizar</md-button>
+                            <md-button class="md-raised md-primary" ng-disabled = "edita.pass.$invalid || edita.passC.$invalid || edita.apodo.$invalid" ng-click="editar()">Actualizar</md-button>
                             <md-button ng-click= "cancelar()">Cancelar</md-button>
                           </div>
                       </div>
@@ -92,14 +101,15 @@
                           <div>
                             <md-input-container>
                               <label>Motivo Cierre</label>
-                              <input type="text" name = "m" ng-required = "true" ng-model="motivoC" required = "true">
+                              <input type="text" name = "m" ng-required = "true" ng-model="motivoC" required = "true" ng-maxlength="200">
                               <div ng-messages="cierre.m.$error">
                                 <div ng-message="required">Motivo requerido!</div>
+                                 <div ng-message="maxlength">Máximo 200 caracteres</div>
                               </div>
                             </md-input-container>
                           </div>
                           <div layout = "column" layout-align="center center">
-                            <md-button class="md-raised md-primary" ng-disabled = "motivoC == null " ng-click="cerrarC()">Cerrar Cuenta</md-button>
+                            <md-button class="md-raised md-primary" ng-disabled = "cierre.m.$invalid" ng-click="cerrarC()">Cerrar Cuenta</md-button>
                             <md-button ng-click= "cancelar()">Cancelar</md-button>
                           </div>
                       </div>

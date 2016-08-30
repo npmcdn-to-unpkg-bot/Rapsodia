@@ -21,19 +21,21 @@
                           <div>
                             <md-input-container>
                               <label>E-mail</label>
-                              <input type="email" name = "email" ng-required = "true" ng-pattern="/^.+@.+\..+$/" ng-model="newUsuario.emailU">
+                              <input type="email" name = "email" ng-required = "true" ng-maxlength="45" ng-pattern="/^.+@.+\..+$/" ng-model="newUsuario.emailU">
                               <div ng-messages="crear.email.$error">
                                 <div ng-message="required">Email requerido!</div>
                                 <div ng-message="pattern">Inválido!, Ej: sac@udeas.cl</div>
+                                <div ng-message="maxlength">Máximo 45 caracteres</div>
                               </div>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Rut</label>
-                              <input type="text" name = "rut" ng-required = "true" ng-directive ng-model="newUsuario.rutU">
+                              <input type="text" name = "rut"  ng-maxlength="25" ng-required = "true" ng-directive ng-model="newUsuario.rutU">
                               <div ng-messages="crear.rut.$error">
                                 <div ng-message="required">Rut requerido!</div>
+                                <div ng-message="maxlength">Máximo 25 caracteres</div>
                               </div>
                               <span ng-show="crear.rut.$invalid && crear.rut.$dirty && crear.rut.$touched" class="md-input-message-animation ng-scope" style = "opacity: 1; margin-top: 0px;">Inválido!, Ej:18486956-k</span>
                             </md-input-container>
@@ -41,63 +43,70 @@
                           <div>
                             <md-input-container>
                               <label>Nombre</label>
-                              <input type="text" name = "nombre" ng-required = "true" ng-model="newUsuario.nombreU">
+                              <input type="text" name = "nombre" ng-required = "true" ng-model="newUsuario.nombreU" ng-maxlength="45">
                               <div ng-messages="crear.nombre.$error">
                                 <div ng-message="required">Nombre requerido!</div>
+                                <div ng-message="maxlength">Máximo 45 caracteres</div> 
                               </div>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Apellido</label>
-                              <input type="text" name = "apellido" ng-required = "true" ng-model="newUsuario.apellidoU">
+                              <input type="text" name = "apellido" ng-required = "true" ng-model="newUsuario.apellidoU" ng-maxlength="45">
                               <div ng-messages="crear.apellido.$error">
                                 <div ng-message="required">Apellido requerido!</div>
+                                <div ng-message="maxlength">Máximo 45 caracteres</div> 
                               </div>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Apodo</label>
-                              <input type="text" name = "apodo" ng-required = "true" ng-model="newUsuario.apodoU">
+                              <input type="text" name = "apodo" ng-required = "true" ng-model="newUsuario.apodoU" ng-maxlength="30">
                               <div ng-messages="crear.apodo.$error">
                                 <div ng-message="required">Apodo requerido!</div>
+                                <div ng-message="maxlength">Máximo 30 caracteres</div> 
                               </div>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Contraseña</label>
-                              <input type="password" name = "pass" ng-required = "true" ng-model="newUsuario.contrasenaU">
+                              <input type="password" name = "pass" ng-required = "true" ng-model="newUsuario.contrasenaU" ng-maxlength="45">
                               <div ng-messages="crear.pass.$error">
                                 <div ng-message="required">Contraseña requerida!</div>
+                                <div ng-message="maxlength">Máximo 45 caracteres</div> 
                               </div>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Confirmar Contraseña</label>
-                              <input type="password" name = "passC" ng-required = "true" ng-model="passC">
+                              <input type="password" name = "passC" ng-required = "true" ng-model="passC" ng-maxlength="45">
                               <div ng-messages="crear.passC.$error">
                                 <div ng-message="required">Confirmación requerida!</div>
+                                <div ng-message="maxlength">Máximo 45 caracteres</div> 
                               </div>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Pregunta Secreta</label>
-                              <input type="text" name = "ps" ng-required = "true" ng-model="newUsuario.preguntaU">
+                              <input type="text" name = "ps" ng-required = "true" ng-model="newUsuario.preguntaU" ng-maxlength="45">
                               <div ng-messages="crear.ps.$error">
                                 <div ng-message="required">Pregunta secreta requerida!</div>
+                                <div ng-message="maxlength">Máximo 45 caracteres</div> 
                               </div>
                             </md-input-container>
                           </div>
                           <div>
                             <md-input-container>
                               <label>Respuesta</label>
-                              <input type="password" name = "res" ng-required = "true" ng-model="newUsuario.respuestaU">
+                              <input type="password" name = "res" ng-required = "true" ng-model="newUsuario.respuestaU" ng-maxlength="45">
                               <div ng-messages="crear.res.$error">
                                 <div ng-message="required">Respuesta requerida!</div>
+                                <div ng-message="maxlength">Máximo 45 caracteres</div> 
                               </div>
                             </md-input-container>
                           </div>
